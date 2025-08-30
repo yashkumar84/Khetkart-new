@@ -24,7 +24,7 @@ router.post("/", requireAuth, async (req, res) => {
       $or: [
         { expiresAt: { $exists: false } },
         { expiresAt: null },
-        { expiresAt: { $gt: new Date() } },
+        { expiresAt: { $gte: new Date() } },
       ],
     });
     if (c) discountTotal = Math.round((total * c.discountPercent) / 100);
