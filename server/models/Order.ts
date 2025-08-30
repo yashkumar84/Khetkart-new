@@ -12,9 +12,11 @@ export interface IOrderItem {
 export interface IOrder extends Document {
   user: Types.ObjectId;
   items: IOrderItem[];
-  total: number;
-  discountTotal?: number;
-  finalTotal: number;
+  total: number; // original total before discount
+  discountTotal?: number; // discount amount applied
+  finalTotal: number; // total after discount
+  couponCode?: string;
+  couponPercent?: number;
   address: string;
   status: OrderStatus;
   assignedTo?: Types.ObjectId; // delivery partner
