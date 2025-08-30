@@ -52,6 +52,16 @@ export default function AdminDashboard() {
       <div>
         <Navbar />
         <main className="container space-y-8 py-8">
+          <div className="flex flex-wrap gap-2">
+            <Link to="/admin/users" className="underline">Manage Users</Link>
+            <span>•</span>
+            <Link to="/admin/products" className="underline">Manage Products</Link>
+            <span>•</span>
+            <Link to="/admin/orders" className="underline">Manage Orders</Link>
+            <span>•</span>
+            <Link to="/admin/coupons" className="underline">Manage Coupons</Link>
+          </div>
+
           <div className="grid gap-4 md:grid-cols-4">
             <Card><CardHeader>Users</CardHeader><CardContent><div className="text-3xl font-extrabold">{users.length}</div></CardContent></Card>
             <Card><CardHeader>Orders</CardHeader><CardContent><div className="text-3xl font-extrabold">{orders.length}</div></CardContent></Card>
