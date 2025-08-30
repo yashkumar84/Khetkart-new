@@ -21,12 +21,33 @@ export default function Checkout() {
   const [validating, setValidating] = useState(false);
   const nav = useNavigate();
   const t = useT();
+  const [placing, setPlacing] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const subtotal = useMemo(() => total(), [items]);
   const discount = couponInfo?.amount ?? 0;
   const final = Math.max(0, subtotal - discount);
 
   useEffect(() => { setCouponInfo(null); }, [coupon]);
+
+  async function handlePlaceOrder() {
+    setError(null);
+    if (!items.length) { setError("Cart is empty"); return; }
+    if (!address.trim()) { setError("Please enter delivery address"); return; }
+    const token = localStorage.getItem("kk_token");
+    if (!token) { nav("/login"); return; }
+    setPlacing(true);
+    try {
+      const payload = items.map((i) => ({ productId: i.product._id, quantity: i.quantity }));
+      const order = await place(payload, address, couponInfo ? coupon : undefined);
+      clear();
+      nav(`/order-success/${order._id}`);
+    } catch (e: any) {
+      setError(e?.message || "Failed to place order");
+    } finally {
+      setPlacing(false);
+    }
+  }
 
   return (
     <div>
