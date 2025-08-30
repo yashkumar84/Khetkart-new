@@ -12,7 +12,7 @@ export default function CategoryBar() {
       {cats.map((c) => (
         <Button key={c} variant={category === c ? "default" : "secondary"} onClick={() => fetch({ category: c })}>{t(`cat_${c}`)}</Button>
       ))}
-      <Button variant={!category ? "default" : "secondary"} onClick={() => fetch({ category: "" as any })}>All</Button>
+      <Button variant={!category ? "default" : "secondary"} onClick={() => fetch({ category: "" as any })}>{t("all")}</Button>
     </div>
   );
 }
