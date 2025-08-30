@@ -37,9 +37,30 @@ export default function AdminOrders() {
                   <TableCell>{new Date(o.createdAt).toLocaleString()}</TableCell>
                   <TableCell>{o.status}</TableCell>
                   <TableCell>₹{o.finalTotal}</TableCell>
-                  <TableCell className="space-x-2">
-                    <Button size="sm" variant="secondary" onClick={async () => { await api(`/orders/${o._id}/status`, { method: "POST", auth: true, body: JSON.stringify({ status: "Confirmed" }) }); load(); }}>Confirm</Button>
-                    <Button size="sm" onClick={async () => { await api(`/orders/${o._id}/status`, { method: "POST", auth: true, body: JSON.stringify({ status: "Delivered" }) }); load(); }}>Deliver</Button>
+                  <TableCell className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <Select onValueChange={async (v) => { await api(`/orders/${o._id}/status`, { method: "POST", auth: true, body: JSON.stringify({ status: v }) }); load(); }}>
+                        <SelectTrigger className="w-40"><SelectValue placeholder="Set status" /></SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Placed">Placed</SelectItem>
+                          <SelectItem value="Confirmed">Confirmed</SelectItem>
+                          <SelectItem value="Out for delivery">Out for delivery</SelectItem>
+                          <SelectItem value="Delivered">Delivered</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <Button size="sm" variant="secondary" onClick={async () => { await api(`/orders/${o._id}/status`, { method: "POST", auth: true, body: JSON.stringify({ status: "Confirmed" }) }); load(); }}>Confirm</Button>
+                      <Button size="sm" onClick={async () => { await api(`/orders/${o._id}/status`, { method: "POST", auth: true, body: JSON.stringify({ status: "Delivered" }) }); load(); }}>Deliver</Button>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Input placeholder="Delivery user id" className="w-48" id={`assign-${o._id}`} />
+                      <Button size="sm" onClick={async () => {
+                        const el = document.getElementById(`assign-${o._id}`) as HTMLInputElement | null;
+                        const id = el?.value?.trim();
+                        if (!id) return;
+                        await api(`/orders/${o._id}/assign`, { method: "POST", auth: true, body: JSON.stringify({ deliveryUserId: id }) });
+                        load();
+                      }}>Assign</Button>
+                    </div>
                   </TableCell>
                 </TableRow>
               ))}
