@@ -9,7 +9,11 @@ interface Order { _id: string; finalTotal: number; status: string; createdAt: st
 export default function DeliveryDashboard() {
   const [rows, setRows] = useState<Order[]>([]);
   async function load() { const res = await api<{ orders: Order[] }>("/delivery/assigned", { auth: true }); setRows(res.orders); }
-  useEffect(() => { load(); }, []);
+  useEffect(() => {
+    const token = localStorage.getItem("kk_token");
+    if (!token) return;
+    load();
+  }, []);
 
   return (
     <ProtectedRoute role="delivery">
