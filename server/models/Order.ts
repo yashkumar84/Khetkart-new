@@ -35,6 +35,8 @@ const OrderSchema = new Schema<IOrder>({
   total: { type: Number, required: true },
   discountTotal: { type: Number },
   finalTotal: { type: Number, required: true },
+  couponCode: { type: String },
+  couponPercent: { type: Number },
   address: { type: String, required: true },
   status: { type: String, enum: ["Placed", "Confirmed", "Out for delivery", "Delivered", "Cancelled"], default: "Placed", index: true },
   assignedTo: { type: Schema.Types.ObjectId, ref: "User" },
