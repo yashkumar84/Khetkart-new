@@ -14,6 +14,7 @@ export default function Checkout() {
   const [address, setAddress] = useState("");
   const [coupon, setCoupon] = useState("");
   const nav = useNavigate();
+  const t = useT();
 
   return (
     <div>
