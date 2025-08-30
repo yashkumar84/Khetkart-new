@@ -10,6 +10,7 @@ import userRoutes from "./routes/users";
 import seedRoutes from "./routes/seed";
 import farmerRoutes from "./routes/farmer";
 import deliveryRoutes from "./routes/delivery";
+import couponRoutes from "./routes/coupons";
 
 const ensureDb: RequestHandler = async (_req, res, next) => {
   if (!process.env.MONGODB_URI) {
