@@ -2,6 +2,7 @@ import { Router } from "express";
 import { Order } from "../models/Order";
 import { Product } from "../models/Product";
 import { requireAuth, requireRole } from "../middlewares/auth";
+import { Coupon } from "../models/Coupon";
 
 const router = Router();
 
@@ -15,8 +16,12 @@ router.post("/", requireAuth, async (req, res) => {
     return { product: p._id, title: p.title, price: (p.discountPrice ?? p.price), quantity: it.quantity };
   }));
   const total = dbItems.reduce((s, it) => s + it.price * it.quantity, 0);
-  const discountTotal = 0; // Apply coupon validation here
-  const finalTotal = total - discountTotal;
+  let discountTotal = 0;
+  if (couponCode) {
+    const c = await Coupon.findOne({ code: couponCode.toUpperCase(), isActive: true, $or: [{ expiresAt: null }, { expiresAt: { $gt: new Date() } }] });
+    if (c) discountTotal = Math.round((total * c.discountPercent) / 100);
+  }
+  const finalTotal = Math.max(0, total - discountTotal);
   const order = await Order.create({ user: (req as any).user.id, items: dbItems, total, discountTotal, finalTotal, address, status: "Placed" });
   res.status(201).json({ order });
 });
