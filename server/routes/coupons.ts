@@ -18,7 +18,15 @@ router.post("/", requireAuth, requireRole("admin"), async (req, res) => {
   if (!code || typeof discountPercent !== "number") return res.status(400).json({ message: "Missing fields" });
   const exists = await Coupon.findOne({ code: code.toUpperCase() });
   if (exists) return res.status(409).json({ message: "Coupon already exists" });
-  const c = await Coupon.create({ code: code.toUpperCase(), discountPercent, isActive: isActive ?? true, description, expiresAt: expiresAt ? new Date(expiresAt) : undefined });
+  let exp: Date | undefined = undefined;
+  if (expiresAt) {
+    const d = new Date(expiresAt);
+    if (!isNaN(d.getTime())) {
+      d.setHours(23, 59, 59, 999); // end of day
+      exp = d;
+    }
+  }
+  const c = await Coupon.create({ code: code.toUpperCase(), discountPercent, isActive: isActive ?? true, description, expiresAt: exp });
   res.status(201).json({ coupon: c });
 });
 
@@ -29,6 +37,15 @@ router.put("/:id", requireAuth, requireRole("admin"), async (req, res) => {
   if (typeof discountPercent === "number") update.discountPercent = discountPercent;
   if (typeof isActive === "boolean") update.isActive = isActive;
   if (typeof expiresAt !== "undefined") update.expiresAt = expiresAt ? new Date(expiresAt) : undefined;
+  if (typeof expiresAt !== "undefined") {
+    if (expiresAt) {
+      const d = new Date(expiresAt);
+      if (!isNaN(d.getTime())) d.setHours(23, 59, 59, 999);
+      update.expiresAt = d;
+    } else {
+      update.expiresAt = undefined;
+    }
+  }
   const c = await Coupon.findByIdAndUpdate(req.params.id, update, { new: true });
   if (!c) return res.status(404).json({ message: "Not found" });
   res.json({ coupon: c });
@@ -49,7 +66,7 @@ router.get("/validate", async (req, res) => {
   const c = await Coupon.findOne({
     code,
     isActive: true,
-    $or: [ { expiresAt: { $exists: false } }, { expiresAt: null }, { expiresAt: { $gt: new Date() } } ],
+    $or: [ { expiresAt: { $exists: false } }, { expiresAt: null }, { expiresAt: { $gte: new Date() } } ],
   }).lean();
   if (!c) return res.json({ valid: false, message: "Invalid or expired coupon" });
   const discountAmount = Math.round((amount * c.discountPercent) / 100);
