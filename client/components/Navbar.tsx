@@ -51,7 +51,14 @@ export default function Navbar() {
             {dark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
           </Button>
           <Button type="button" variant="ghost" size="icon" asChild>
-            <Link to="/cart" aria-label="cart"><ShoppingCart className="h-5 w-5" /></Link>
+            <Link to="/cart" aria-label="cart" className="relative">
+              <ShoppingCart className="h-5 w-5" />
+              {items.length > 0 && (
+                <span className="absolute -right-2 -top-2 inline-flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-primary px-1 text-xs text-primary-foreground">
+                  {items.reduce((s, i) => s + i.quantity, 0)}
+                </span>
+              )}
+            </Link>
           </Button>
           {user ? (
             <div className="flex items-center gap-2">
