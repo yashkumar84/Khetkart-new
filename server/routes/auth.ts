@@ -54,4 +54,17 @@ router.post("/seed-demo", async (_req, res) => {
   res.json({ seeded: results });
 });
 
+router.get("/me", requireAuth, async (req, res) => {
+  const user = await User.findById((req as any).user.id).lean();
+  if (!user) return res.status(404).json({ message: "Not found" });
+  res.json({ user: { id: user._id, name: user.name, email: user.email, role: user.role, address: user.address, phone: user.phone } });
+});
+
+router.put("/me", requireAuth, async (req, res) => {
+  const { name, address, phone } = req.body as { name?: string; address?: string; phone?: string };
+  const user = await User.findByIdAndUpdate((req as any).user.id, { name, address, phone }, { new: true }).lean();
+  if (!user) return res.status(404).json({ message: "Not found" });
+  res.json({ user: { id: user._id, name: user.name, email: user.email, role: user.role, address: user.address, phone: user.phone } });
+});
+
 export default router;
