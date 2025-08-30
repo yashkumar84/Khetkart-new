@@ -26,7 +26,10 @@ export default function AdminOrders() {
                 <TableHead>ID</TableHead>
                 <TableHead>Placed</TableHead>
                 <TableHead>Status</TableHead>
-                <TableHead>Total</TableHead>
+                <TableHead>Coupon</TableHead>
+                <TableHead>Original</TableHead>
+                <TableHead>Discount</TableHead>
+                <TableHead>Final</TableHead>
                 <TableHead>Action</TableHead>
               </TableRow>
             </TableHeader>
