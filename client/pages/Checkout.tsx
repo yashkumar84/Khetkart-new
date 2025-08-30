@@ -40,7 +40,7 @@ export default function Checkout() {
               const payload = items.map((i) => ({ productId: i.product._id, quantity: i.quantity }));
               const order = await place(payload, address, coupon || undefined);
               clear();
-              nav(`/orders#${order._id}`);
+              nav(`/order-success/${order._id}`);
             }}>{t("place_order_cod")}</Button>
             <Button className="w-full" variant="secondary" disabled>{t("pay_online_soon")}</Button>
           </div>
