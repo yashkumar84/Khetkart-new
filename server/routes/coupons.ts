@@ -51,7 +51,7 @@ router.get("/validate", async (req, res) => {
     isActive: true,
     $or: [ { expiresAt: { $exists: false } }, { expiresAt: null }, { expiresAt: { $gt: new Date() } } ],
   }).lean();
-  if (!c) return res.status(404).json({ valid: false, message: "Invalid or expired coupon" });
+  if (!c) return res.json({ valid: false, message: "Invalid or expired coupon" });
   const discountAmount = Math.round((amount * c.discountPercent) / 100);
   res.json({ valid: true, discountPercent: c.discountPercent, discountAmount });
 });
