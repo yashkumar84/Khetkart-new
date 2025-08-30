@@ -55,16 +55,26 @@ export default function Checkout() {
               <Input id="coupon" placeholder="SAVE10" value={coupon} onChange={(e) => setCoupon(e.target.value.toUpperCase())} />
               <Button disabled={!coupon || validating} onClick={async () => {
                 setValidating(true);
+                setCouponError(null);
                 try {
-                  const res = await api<{ valid: boolean; discountPercent: number; discountAmount: number }>(`/coupons/validate?code=${encodeURIComponent(coupon)}&amount=${subtotal}`);
-                  if (res.valid) setCouponInfo({ percent: res.discountPercent, amount: res.discountAmount });
+                  const res = await api<{ valid: boolean; discountPercent?: number; discountAmount?: number; message?: string }>(`/coupons/validate?code=${encodeURIComponent(coupon)}&amount=${subtotal}`);
+                  if (res.valid) {
+                    setCouponInfo({ percent: res.discountPercent || 0, amount: res.discountAmount || 0 });
+                  } else {
+                    setCouponInfo(null);
+                    setCouponError(res.message || "Coupon is not valid");
+                  }
+                } catch (e: any) {
+                  setCouponInfo(null);
+                  setCouponError(e?.message || "Coupon is not valid");
                 } finally {
                   setValidating(false);
                 }
               }}>Apply</Button>
-              {couponInfo && <Button variant="secondary" onClick={() => setCouponInfo(null)}>Remove</Button>}
+              {couponInfo && <Button variant="secondary" onClick={() => { setCouponInfo(null); setCoupon(""); }}>Remove</Button>}
             </div>
             {couponInfo && <div className="text-sm text-green-600">Applied {couponInfo.percent}% off · -₹{couponInfo.amount}</div>}
+            {couponError && <div className="text-sm text-destructive">{couponError}</div>}
           </div>
         </div>
 
