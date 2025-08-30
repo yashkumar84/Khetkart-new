@@ -31,11 +31,24 @@ export default function Index() {
 
         <section className="space-y-4">
           <h2 className="text-xl font-semibold">Top Deals</h2>
-          <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-            {products.slice(0, 8).map((p) => (
-              <ProductCard key={p._id} p={p} />
-            ))}
-          </div>
+          {products.length === 0 ? (
+            <div className="rounded border p-6 text-center">
+              <div className="mb-2 font-semibold">No products yet</div>
+              <p className="mb-4 text-sm text-muted-foreground">Click below to seed demo data.</p>
+              <button
+                className="inline-flex items-center rounded bg-primary px-4 py-2 text-primary-foreground"
+                onClick={async () => { await fetch('/api/seed/full', { method: 'POST' }); fetchProducts(); }}
+              >
+                Seed demo data
+              </button>
+            </div>
+          ) : (
+            <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+              {products.slice(0, 8).map((p) => (
+                <ProductCard key={p._id} p={p} />
+              ))}
+            </div>
+          )}
         </section>
 
         <section className="rounded-xl border p-6 text-center">
