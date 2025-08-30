@@ -53,6 +53,7 @@ export default function Login() {
             <div className="text-center text-xs text-muted-foreground">
               Demo: admin@khetkart.com / admin123 • user@khetkart.com / user123
             </div>
+            <Button variant="outline" onClick={async () => { await fetch('/api/auth/seed-demo', { method: 'POST' }); alert('Seeded demo users if they did not exist.'); }}>Seed demo users</Button>
           </CardFooter>
         </Card>
       </main>
