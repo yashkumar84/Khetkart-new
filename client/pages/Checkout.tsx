@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useT } from "@/i18n";
 
 export default function Checkout() {
   const { items, clear, total } = useCart();
