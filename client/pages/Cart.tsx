@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useT } from "@/i18n";
 
 export default function Cart() {
-  const { items, remove, clear, total } = useCart();
+  const { items, remove, clear, total, inc, dec } = useCart();
   const nav = useNavigate();
   const amount = total();
   const tr = useT();
