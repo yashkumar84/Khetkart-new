@@ -106,14 +106,9 @@ export default function Checkout() {
             <div className="flex justify-between"><span>Discount</span><span className="text-green-600">-₹{discount}</span></div>
             <div className="flex justify-between border-t pt-2 font-semibold"><span>{t("total")}</span><span>₹{final}</span></div>
           </div>
+          {error && <div className="mt-3 rounded bg-destructive/10 p-2 text-sm text-destructive">{error}</div>}
           <div className="mt-4 space-y-2">
-            <Button className="w-full" onClick={async () => {
-              if (!address) return;
-              const payload = items.map((i) => ({ productId: i.product._id, quantity: i.quantity }));
-              const order = await place(payload, address, couponInfo ? coupon : undefined);
-              clear();
-              nav(`/order-success/${order._id}`);
-            }}>{t("place_order_cod")}</Button>
+            <Button className="w-full" disabled={placing} onClick={handlePlaceOrder}>{placing ? "Placing..." : t("place_order_cod")}</Button>
             <Button className="w-full" variant="secondary" disabled>{t("pay_online_soon")}</Button>
           </div>
         </div>
