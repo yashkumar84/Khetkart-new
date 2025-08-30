@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-interface Order { _id: string; finalTotal: number; status: string; createdAt: string }
+interface Order { _id: string; total: number; discountTotal?: number; finalTotal: number; couponCode?: string; status: string; createdAt: string }
 
 export default function AdminOrders() {
   const [rows, setRows] = useState<Order[]>([]);
