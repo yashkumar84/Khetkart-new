@@ -1,9 +1,39 @@
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import CategoryBar from "@/components/CategoryBar";
+import ProductCard from "@/components/ProductCard";
+import { useEffect } from "react";
+import { useProducts } from "@/store/products";
+
 export default function Index() {
+  const { products, fetch } = useProducts();
+
+  useEffect(() => { fetch({}); }, [fetch]);
+
   return (
-    <main className="min-h-screen flex items-center justify-center bg-[radial-gradient(1200px_600px_at_50%_-100px,rgba(139,92,246,0.25),transparent),radial-gradient(800px_400px_at_80%_120%,rgba(236,72,153,0.2),transparent)]">
-      <h1 className="text-6xl md:text-8xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-violet-400 via-fuchsia-400 to-rose-400 drop-shadow-sm select-none">
-        hello
-      </h1>
-    </main>
+    <div className="min-h-screen">
+      <Navbar />
+      <main className="container py-8 space-y-8">
+        <section className="rounded-lg bg-gradient-to-br from-violet-500/10 via-fuchsia-500/10 to-rose-500/10 p-8 text-center">
+          <h1 className="text-3xl font-extrabold tracking-tight">Fresh Farm Delivery</h1>
+          <p className="mt-2 text-muted-foreground">Vegetables • Fruits • Milk • Crops</p>
+        </section>
+
+        <section className="space-y-4">
+          <h2 className="text-xl font-semibold">Categories</h2>
+          <CategoryBar />
+        </section>
+
+        <section className="space-y-4">
+          <h2 className="text-xl font-semibold">Products</h2>
+          <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+            {products.map((p) => (
+              <ProductCard key={p._id} p={p} />
+            ))}
+          </div>
+        </section>
+      </main>
+      <Footer />
+    </div>
   );
 }
