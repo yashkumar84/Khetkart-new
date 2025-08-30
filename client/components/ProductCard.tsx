@@ -4,9 +4,12 @@ import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
 import type { Product } from "@/store/products";
 import { useCart } from "@/store/cart";
+import { Heart } from "lucide-react";
+import { useState } from "react";
 
 export default function ProductCard({ p }: { p: Product }) {
   const { add } = useCart();
+  const [wish, setWish] = useState(false);
   const off = p.discountPrice ? Math.round(((p.price - p.discountPrice) / p.price) * 100) : 0;
   return (
     <Card className="group overflow-hidden">
