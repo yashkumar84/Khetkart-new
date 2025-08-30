@@ -20,7 +20,7 @@ export default function Login() {
       <main className="container flex min-h-[70vh] items-center justify-center py-10">
         <Card className="w-full max-w-md">
           <CardHeader>
-            <h1 className="text-2xl font-bold">Login</h1>
+            <h1 className="text-2xl font-bold">{t("login")}</h1>
           </CardHeader>
           <CardContent className="space-y-4">
             {error && <div className="rounded bg-destructive/10 p-2 text-sm text-destructive">{error}</div>}
