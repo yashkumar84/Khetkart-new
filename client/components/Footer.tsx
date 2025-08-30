@@ -1,10 +1,10 @@
 export default function Footer() {
   return (
-    <footer className="mt-16 border-t bg-secondary/30">
-      <div className="container grid gap-6 py-10 md:grid-cols-4">
+    <footer className="mt-16 border-t bg-gradient-to-b from-secondary/60 to-background">
+      <div className="container grid gap-8 py-12 md:grid-cols-4">
         <div>
-          <div className="text-xl font-bold">KhetKart</div>
-          <p className="mt-2 text-sm text-muted-foreground">Fresh farm delivery: vegetables, fruits, milk, and more.</p>
+          <div className="text-2xl font-extrabold text-primary">KhetKart</div>
+          <p className="mt-2 text-sm text-muted-foreground">Fresh farm delivery: vegetables, fruits, milk, and more. Support local farmers.</p>
         </div>
         <div>
           <div className="font-semibold">About</div>
