@@ -4,7 +4,8 @@ type Dict = Record<string, string>;
 
 const en: Dict = {
   app_name: "KhetKart",
-  banner: "Fresh from local farms • Free delivery on ₹299+ • 10–30 min delivery",
+  banner:
+    "Fresh from local farms • Free delivery on ₹299+ • 10–30 min delivery",
   nav_home: "Home",
   nav_admin: "Admin",
   nav_farmer: "Farmer",
@@ -18,7 +19,8 @@ const en: Dict = {
   empty_products_title: "No products yet",
   empty_products_sub: "Click below to seed demo data.",
   seed_demo: "Seed demo data",
-  footer_about: "Fresh farm delivery: vegetables, fruits, milk, and more. Support local farmers.",
+  footer_about:
+    "Fresh farm delivery: vegetables, fruits, milk, and more. Support local farmers.",
   about: "About",
   contact: "Contact",
   terms: "Terms",
@@ -71,7 +73,8 @@ const hi: Dict = {
   empty_products_title: "अभी कोई प्रोडक्ट नहीं",
   empty_products_sub: "डेमो डेटा जोड़ने के लिए नीचे क्लिक करें।",
   seed_demo: "डेमो डेटा जोड़ें",
-  footer_about: "ताज़��� खेत उत्पादों की डिलीवरी: सब्ज़ियाँ, फल, दूध और अधिक। स्थानीय किसानों का समर्थन करें।",
+  footer_about:
+    "ताज़��� खेत उत्पादों की डिलीवरी: सब्ज़ियाँ, फल, दूध और अधिक। स्थानीय किसानों का समर्थन करें।",
   about: "हमारे बारे में",
   contact: "संपर्क करें",
   terms: "शर्तें",

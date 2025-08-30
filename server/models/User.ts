@@ -14,17 +14,25 @@ export interface IUser extends Document {
   comparePassword(candidate: string): Promise<boolean>;
 }
 
-const UserSchema = new Schema<IUser>({
-  name: { type: String, required: true },
-  email: { type: String, required: true, unique: true, index: true },
-  phone: { type: String },
-  password: { type: String, required: true },
-  role: { type: String, enum: ["user", "admin", "farmer", "delivery"], default: "user", index: true },
-  address: { type: String },
-  isActive: { type: Boolean, default: true },
-}, { timestamps: true });
+const UserSchema = new Schema<IUser>(
+  {
+    name: { type: String, required: true },
+    email: { type: String, required: true, unique: true, index: true },
+    phone: { type: String },
+    password: { type: String, required: true },
+    role: {
+      type: String,
+      enum: ["user", "admin", "farmer", "delivery"],
+      default: "user",
+      index: true,
+    },
+    address: { type: String },
+    isActive: { type: Boolean, default: true },
+  },
+  { timestamps: true },
+);
 
-UserSchema.pre("save", async function(next) {
+UserSchema.pre("save", async function (next) {
   const user = this as IUser;
   if (!user.isModified("password")) return next();
   const salt = await bcrypt.genSalt(10);
@@ -32,8 +40,9 @@ UserSchema.pre("save", async function(next) {
   next();
 });
 
-UserSchema.methods.comparePassword = function(candidate: string) {
+UserSchema.methods.comparePassword = function (candidate: string) {
   return bcrypt.compare(candidate, this.password);
 };
 
-export const User = mongoose.models.User || mongoose.model<IUser>("User", UserSchema);
+export const User =
+  mongoose.models.User || mongoose.model<IUser>("User", UserSchema);

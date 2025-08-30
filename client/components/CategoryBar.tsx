@@ -10,9 +10,20 @@ export default function CategoryBar() {
   return (
     <div className="flex flex-wrap gap-2">
       {cats.map((c) => (
-        <Button key={c} variant={category === c ? "default" : "secondary"} onClick={() => fetch({ category: c })}>{t(`cat_${c}`)}</Button>
+        <Button
+          key={c}
+          variant={category === c ? "default" : "secondary"}
+          onClick={() => fetch({ category: c })}
+        >
+          {t(`cat_${c}`)}
+        </Button>
       ))}
-      <Button variant={!category ? "default" : "secondary"} onClick={() => fetch({ category: "" as any })}>{t("all")}</Button>
+      <Button
+        variant={!category ? "default" : "secondary"}
+        onClick={() => fetch({ category: "" as any })}
+      >
+        {t("all")}
+      </Button>
     </div>
   );
 }

@@ -3,7 +3,12 @@ import { api } from "@/lib/api";
 
 type Role = "user" | "admin" | "farmer" | "delivery";
 
-export interface AuthUser { id: string; name: string; email: string; role: Role }
+export interface AuthUser {
+  id: string;
+  name: string;
+  email: string;
+  role: Role;
+}
 
 interface AuthState {
   user: AuthUser | null;
@@ -17,17 +22,24 @@ interface AuthState {
 
 export const useAuth = create<AuthState>((set) => ({
   user: null,
-  token: typeof window !== "undefined" ? localStorage.getItem("kk_token") : null,
+  token:
+    typeof window !== "undefined" ? localStorage.getItem("kk_token") : null,
   loading: false,
   async login(email, password) {
     set({ loading: true });
-    const res = await api<{ token: string; user: AuthUser }>("/auth/login", { method: "POST", body: JSON.stringify({ email, password }) });
+    const res = await api<{ token: string; user: AuthUser }>("/auth/login", {
+      method: "POST",
+      body: JSON.stringify({ email, password }),
+    });
     localStorage.setItem("kk_token", res.token);
     set({ user: res.user, token: res.token, loading: false });
   },
   async register(name, email, password) {
     set({ loading: true });
-    const res = await api<{ token: string; user: AuthUser }>("/auth/register", { method: "POST", body: JSON.stringify({ name, email, password }) });
+    const res = await api<{ token: string; user: AuthUser }>("/auth/register", {
+      method: "POST",
+      body: JSON.stringify({ name, email, password }),
+    });
     localStorage.setItem("kk_token", res.token);
     set({ user: res.user, token: res.token, loading: false });
   },

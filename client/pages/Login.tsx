@@ -2,7 +2,12 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@/store/auth";
 import Navbar from "@/components/Navbar";
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -25,14 +30,28 @@ export default function Login() {
             <h1 className="text-2xl font-bold">{t("login")}</h1>
           </CardHeader>
           <CardContent className="space-y-4">
-            {error && <div className="rounded bg-destructive/10 p-2 text-sm text-destructive">{error}</div>}
+            {error && (
+              <div className="rounded bg-destructive/10 p-2 text-sm text-destructive">
+                {error}
+              </div>
+            )}
             <div className="space-y-2">
               <Label htmlFor="email">{t("email")}</Label>
-              <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+              <Input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
             </div>
             <div className="space-y-2">
               <Label htmlFor="password">{t("password")}</Label>
-              <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+              <Input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
             </div>
           </CardContent>
           <CardFooter className="flex flex-col items-stretch gap-3">
@@ -50,12 +69,23 @@ export default function Login() {
               {t("continue")}
             </Button>
             <div className="text-center text-sm text-muted-foreground">
-              No account? <Link to="/register" className="underline">{t("register")}</Link>
+              No account?{" "}
+              <Link to="/register" className="underline">
+                {t("register")}
+              </Link>
             </div>
             <div className="text-center text-xs text-muted-foreground">
               Demo: admin@khetkart.com / admin123 • user@khetkart.com / user123
             </div>
-            <Button variant="outline" onClick={async () => { await fetch('/api/auth/seed-demo', { method: 'POST' }); alert('Seeded demo users if they did not exist.'); }}>Seed demo users</Button>
+            <Button
+              variant="outline"
+              onClick={async () => {
+                await fetch("/api/auth/seed-demo", { method: "POST" });
+                alert("Seeded demo users if they did not exist.");
+              }}
+            >
+              Seed demo users
+            </Button>
           </CardFooter>
         </Card>
       </main>

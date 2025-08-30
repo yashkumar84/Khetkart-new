@@ -7,7 +7,9 @@ import { useT } from "@/i18n";
 export default function Orders() {
   const { orders, mine } = useOrders();
   const t = useT();
-  useEffect(() => { mine(); }, [mine]);
+  useEffect(() => {
+    mine();
+  }, [mine]);
 
   return (
     <div>
@@ -21,12 +23,21 @@ export default function Orders() {
                 <div className="font-semibold">Order #{o._id.slice(-6)}</div>
                 <Badge>{o.status}</Badge>
               </div>
-              <div className="mt-2 text-sm text-muted-foreground">{new Date(o.createdAt).toLocaleString()}</div>
-              <div className="mt-2 text-sm">{t("items")}: {o.items.map((i) => `${i.title} x${i.quantity}`).join(", ")}</div>
-              <div className="mt-1 font-bold">{t("total")}: ₹{o.finalTotal}</div>
+              <div className="mt-2 text-sm text-muted-foreground">
+                {new Date(o.createdAt).toLocaleString()}
+              </div>
+              <div className="mt-2 text-sm">
+                {t("items")}:{" "}
+                {o.items.map((i) => `${i.title} x${i.quantity}`).join(", ")}
+              </div>
+              <div className="mt-1 font-bold">
+                {t("total")}: ₹{o.finalTotal}
+              </div>
             </div>
           ))}
-          {orders.length === 0 && <div className="text-muted-foreground">No orders yet.</div>}
+          {orders.length === 0 && (
+            <div className="text-muted-foreground">No orders yet.</div>
+          )}
         </div>
       </main>
     </div>

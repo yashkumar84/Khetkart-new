@@ -13,9 +13,14 @@ export default function Index() {
   const { products, fetch, query } = useProducts() as any;
   const t = useT();
 
-  useEffect(() => { fetch({}); }, [fetch]);
+  useEffect(() => {
+    fetch({});
+  }, [fetch]);
 
-  const emptySearch = Array.isArray(products) && products.length === 0 && (query?.length ?? 0) > 0;
+  const emptySearch =
+    Array.isArray(products) &&
+    products.length === 0 &&
+    (query?.length ?? 0) > 0;
 
   return (
     <div className="min-h-screen">
@@ -33,14 +38,23 @@ export default function Index() {
         <section className="space-y-4">
           <h2 className="text-xl font-semibold">{t("top_deals")}</h2>
           {emptySearch ? (
-            <div className="rounded border p-6 text-center text-muted-foreground">No products found.</div>
+            <div className="rounded border p-6 text-center text-muted-foreground">
+              No products found.
+            </div>
           ) : products.length === 0 ? (
             <div className="rounded border p-6 text-center">
-              <div className="mb-2 font-semibold">{t("empty_products_title")}</div>
-              <p className="mb-4 text-sm text-muted-foreground">{t("empty_products_sub")}</p>
+              <div className="mb-2 font-semibold">
+                {t("empty_products_title")}
+              </div>
+              <p className="mb-4 text-sm text-muted-foreground">
+                {t("empty_products_sub")}
+              </p>
               <button
                 className="inline-flex items-center rounded bg-primary px-4 py-2 text-primary-foreground"
-                onClick={async () => { await fetch('/api/seed/full', { method: 'POST' }); fetch({}); }}
+                onClick={async () => {
+                  await fetch("/api/seed/full", { method: "POST" });
+                  fetch({});
+                }}
               >
                 {t("seed_demo")}
               </button>

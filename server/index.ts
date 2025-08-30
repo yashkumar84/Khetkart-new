@@ -14,7 +14,9 @@ import couponRoutes from "./routes/coupons";
 
 const ensureDb: RequestHandler = async (_req, res, next) => {
   if (!process.env.MONGODB_URI) {
-    return res.status(503).json({ message: "Database not configured", dbConfigured: false });
+    return res
+      .status(503)
+      .json({ message: "Database not configured", dbConfigured: false });
   }
   try {
     if (!(global as any).__mongoConnected) {
@@ -23,7 +25,9 @@ const ensureDb: RequestHandler = async (_req, res, next) => {
     }
     next();
   } catch (e: any) {
-    return res.status(503).json({ message: e?.message || "Database unavailable" });
+    return res
+      .status(503)
+      .json({ message: e?.message || "Database unavailable" });
   }
 };
 
@@ -37,7 +41,11 @@ export function createServer() {
 
   // Health & example routes (no DB required)
   app.get("/api/health", (_req, res) => {
-    res.json({ ok: true, dbConfigured: Boolean(process.env.MONGODB_URI), env: "dev" });
+    res.json({
+      ok: true,
+      dbConfigured: Boolean(process.env.MONGODB_URI),
+      env: "dev",
+    });
   });
 
   app.get("/api/ping", (_req, res) => {

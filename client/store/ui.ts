@@ -16,11 +16,18 @@ function applyDark(dark: boolean) {
 }
 
 export const useUI = create<UIState>((set, get) => ({
-  dark: typeof window !== "undefined" ? localStorage.getItem("kk_dark") === "1" : false,
-  lang: (typeof window !== "undefined" ? (localStorage.getItem("kk_lang") as Lang) : "en") || "en",
+  dark:
+    typeof window !== "undefined"
+      ? localStorage.getItem("kk_dark") === "1"
+      : false,
+  lang:
+    (typeof window !== "undefined"
+      ? (localStorage.getItem("kk_lang") as Lang)
+      : "en") || "en",
   toggleDark() {
     const next = !get().dark;
-    if (typeof window !== "undefined") localStorage.setItem("kk_dark", next ? "1" : "0");
+    if (typeof window !== "undefined")
+      localStorage.setItem("kk_dark", next ? "1" : "0");
     applyDark(next);
     set({ dark: next });
   },

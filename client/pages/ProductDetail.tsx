@@ -19,12 +19,13 @@ export default function ProductDetail() {
     })();
   }, [id]);
 
-  if (!product) return (
-    <div>
-      <Navbar />
-      <main className="container py-10">Loading...</main>
-    </div>
-  );
+  if (!product)
+    return (
+      <div>
+        <Navbar />
+        <main className="container py-10">Loading...</main>
+      </div>
+    );
 
   const price = product.discountPrice ?? product.price;
 
@@ -34,16 +35,26 @@ export default function ProductDetail() {
       <main className="container grid gap-8 py-10 md:grid-cols-2">
         <div className="aspect-square overflow-hidden rounded bg-muted">
           {/* eslint-disable-next-line */}
-          <img src={product.images?.[0] || "/placeholder.svg"} className="h-full w-full object-cover" alt={product.title} />
+          <img
+            src={product.images?.[0] || "/placeholder.svg"}
+            className="h-full w-full object-cover"
+            alt={product.title}
+          />
         </div>
         <div>
           <h1 className="text-3xl font-bold">{product.title}</h1>
           <div className="mt-2 text-muted-foreground">{product.category}</div>
           <div className="mt-4 flex items-baseline gap-2">
             <div className="text-2xl font-extrabold">₹{price}</div>
-            {product.discountPrice && <div className="text-sm text-muted-foreground line-through">₹{product.price}</div>}
+            {product.discountPrice && (
+              <div className="text-sm text-muted-foreground line-through">
+                ₹{product.price}
+              </div>
+            )}
           </div>
-          <p className="mt-4 text-sm text-muted-foreground whitespace-pre-line">{product.description}</p>
+          <p className="mt-4 text-sm text-muted-foreground whitespace-pre-line">
+            {product.description}
+          </p>
           <div className="mt-6 flex gap-2">
             <Button onClick={() => add(product, 1)}>Add to cart</Button>
           </div>

@@ -12,7 +12,10 @@ export const requireAuth: RequestHandler = (req, res, next) => {
   }
   const token = header.split(" ")[1];
   try {
-    const payload = verifyJwt<{ sub: string; role: AuthedRequest["user"]["role"] }>(token);
+    const payload = verifyJwt<{
+      sub: string;
+      role: AuthedRequest["user"]["role"];
+    }>(token);
     (req as AuthedRequest).user = { id: payload.sub, role: payload.role };
     next();
   } catch (err) {
@@ -20,7 +23,9 @@ export const requireAuth: RequestHandler = (req, res, next) => {
   }
 };
 
-export const requireRole = (...roles: Array<AuthedRequest["user"]["role"]>): RequestHandler => {
+export const requireRole = (
+  ...roles: Array<AuthedRequest["user"]["role"]>
+): RequestHandler => {
   return (req, res, next) => {
     const user = (req as AuthedRequest).user;
     if (!user || !roles.includes(user.role)) {

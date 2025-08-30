@@ -20,7 +20,11 @@ interface State {
   loading: boolean;
   query: string;
   category: Category | "";
-  fetch: (params?: { q?: string; category?: Category | ""; discountOnly?: boolean }) => Promise<void>;
+  fetch: (params?: {
+    q?: string;
+    category?: Category | "";
+    discountOnly?: boolean;
+  }) => Promise<void>;
 }
 
 export const useProducts = create<State>((set, get) => ({
@@ -39,10 +43,22 @@ export const useProducts = create<State>((set, get) => ({
     if (params?.discountOnly) q.set("discountOnly", "true");
     q.set("published", "true");
     try {
-      const res = await api<{ products: Product[] }>(`/products?${q.toString()}`);
-      set({ products: res.products, loading: false, query: query || "", category: cat || "" });
+      const res = await api<{ products: Product[] }>(
+        `/products?${q.toString()}`,
+      );
+      set({
+        products: res.products,
+        loading: false,
+        query: query || "",
+        category: cat || "",
+      });
     } catch (_e) {
-      set({ products: [], loading: false, query: query || "", category: cat || "" });
+      set({
+        products: [],
+        loading: false,
+        query: query || "",
+        category: cat || "",
+      });
     }
   },
 }));

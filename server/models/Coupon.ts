@@ -8,12 +8,22 @@ export interface ICoupon extends Document {
   expiresAt?: Date;
 }
 
-const CouponSchema = new Schema<ICoupon>({
-  code: { type: String, required: true, unique: true, uppercase: true, trim: true },
-  description: { type: String },
-  discountPercent: { type: Number, required: true, min: 0, max: 100 },
-  isActive: { type: Boolean, default: true },
-  expiresAt: { type: Date },
-}, { timestamps: true });
+const CouponSchema = new Schema<ICoupon>(
+  {
+    code: {
+      type: String,
+      required: true,
+      unique: true,
+      uppercase: true,
+      trim: true,
+    },
+    description: { type: String },
+    discountPercent: { type: Number, required: true, min: 0, max: 100 },
+    isActive: { type: Boolean, default: true },
+    expiresAt: { type: Date },
+  },
+  { timestamps: true },
+);
 
-export const Coupon = mongoose.models.Coupon || mongoose.model<ICoupon>("Coupon", CouponSchema);
+export const Coupon =
+  mongoose.models.Coupon || mongoose.model<ICoupon>("Coupon", CouponSchema);
