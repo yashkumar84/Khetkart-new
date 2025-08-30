@@ -15,8 +15,15 @@ export default function Navbar() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur">
-      <div className="container flex h-14 items-center gap-3">
-        <Link to="/" className="font-extrabold text-lg">KhetKart</Link>
+      <div className="bg-gradient-to-r from-primary/10 via-accent/20 to-secondary/40 py-2 text-center text-xs text-foreground/80">Fresh from local farms • Free delivery on ₹299+ • 10–30 min delivery</div>
+      <div className="container flex h-16 items-center gap-3">
+        <Link to="/" className="font-extrabold text-xl text-primary">KhetKart</Link>
+        <nav className="hidden md:flex items-center gap-4 text-sm ml-6">
+          <Link to="/" className="hover:text-primary">Home</Link>
+          <Link to="/admin" className="hover:text-primary">Admin</Link>
+          <Link to="/farmer" className="hover:text-primary">Farmer</Link>
+          <Link to="/delivery" className="hover:text-primary">Delivery</Link>
+        </nav>
         <form
           onSubmit={(e) => {
             e.preventDefault();
