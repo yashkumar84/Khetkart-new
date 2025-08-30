@@ -21,19 +21,19 @@ export default function Checkout() {
       <Navbar />
       <main className="container grid gap-6 py-8 md:grid-cols-3">
         <div className="md:col-span-2 space-y-4">
-          <h1 className="text-2xl font-bold">Checkout</h1>
+          <h1 className="text-2xl font-bold">{t("checkout")}</h1>
           <div className="space-y-2">
-            <Label htmlFor="address">Delivery Address</Label>
+            <Label htmlFor="address">{t("delivery_address")}</Label>
             <Input id="address" placeholder="House no, street, city" value={address} onChange={(e) => setAddress(e.target.value)} />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="coupon">Coupon</Label>
+            <Label htmlFor="coupon">{t("coupon")}</Label>
             <Input id="coupon" placeholder="SAVE10" value={coupon} onChange={(e) => setCoupon(e.target.value)} />
           </div>
         </div>
         <div className="rounded border p-4">
-          <div className="flex justify-between"><span>Items</span><span>{items.length}</span></div>
-          <div className="flex justify-between"><span>Total</span><span>₹{total()}</span></div>
+          <div className="flex justify-between"><span>{t("items")}</span><span>{items.length}</span></div>
+          <div className="flex justify-between"><span>{t("total")}</span><span>₹{total()}</span></div>
           <div className="mt-3 space-y-2">
             <Button className="w-full" onClick={async () => {
               if (!address) return;
@@ -41,8 +41,8 @@ export default function Checkout() {
               const order = await place(payload, address, coupon || undefined);
               clear();
               nav(`/orders#${order._id}`);
-            }}>Place Order (COD)</Button>
-            <Button className="w-full" variant="secondary" disabled>Pay Online (UPI) — coming soon</Button>
+            }}>{t("place_order_cod")}</Button>
+            <Button className="w-full" variant="secondary" disabled>{t("pay_online_soon")}</Button>
           </div>
         </div>
       </main>
