@@ -2,6 +2,7 @@ import Navbar from "@/components/Navbar";
 import { useCart } from "@/store/cart";
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
+import { useT } from "@/i18n";
 
 export default function Cart() {
   const { items, remove, clear, total } = useCart();
