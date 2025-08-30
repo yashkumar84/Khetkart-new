@@ -18,7 +18,15 @@ router.post("/", requireAuth, async (req, res) => {
   const total = dbItems.reduce((s, it) => s + it.price * it.quantity, 0);
   let discountTotal = 0;
   if (couponCode) {
-    const c = await Coupon.findOne({ code: couponCode.toUpperCase(), isActive: true, $or: [{ expiresAt: null }, { expiresAt: { $gt: new Date() } }] });
+    const c = await Coupon.findOne({
+      code: couponCode.toUpperCase(),
+      isActive: true,
+      $or: [
+        { expiresAt: { $exists: false } },
+        { expiresAt: null },
+        { expiresAt: { $gt: new Date() } },
+      ],
+    });
     if (c) discountTotal = Math.round((total * c.discountPercent) / 100);
   }
   const finalTotal = Math.max(0, total - discountTotal);
