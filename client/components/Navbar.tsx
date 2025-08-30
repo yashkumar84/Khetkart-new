@@ -16,6 +16,7 @@ export default function Navbar() {
   const { dark, toggleDark, lang, setLang } = useUI();
   const navigate = useNavigate();
   const { fetch } = useProducts();
+  const { items } = useCart();
   const t = useT();
   const [q, setQ] = useState("");
   const dq = useDebounce(q, 400);
