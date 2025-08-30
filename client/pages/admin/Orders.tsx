@@ -39,6 +39,9 @@ export default function AdminOrders() {
                   <TableCell>#{o._id.slice(-6)}</TableCell>
                   <TableCell>{new Date(o.createdAt).toLocaleString()}</TableCell>
                   <TableCell>{o.status}</TableCell>
+                  <TableCell>{o.couponCode || "—"}</TableCell>
+                  <TableCell>₹{o.total}</TableCell>
+                  <TableCell>-₹{o.discountTotal || 0}</TableCell>
                   <TableCell>₹{o.finalTotal}</TableCell>
                   <TableCell className="space-y-2">
                     <div className="flex items-center gap-2">
