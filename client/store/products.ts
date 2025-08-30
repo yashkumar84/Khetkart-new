@@ -38,7 +38,11 @@ export const useProducts = create<State>((set, get) => ({
     if (cat) q.set("category", cat);
     if (params?.discountOnly) q.set("discountOnly", "true");
     q.set("published", "true");
-    const res = await api<{ products: Product[] }>(`/products?${q.toString()}`);
-    set({ products: res.products, loading: false, query: query || "", category: cat || "" });
+    try {
+      const res = await api<{ products: Product[] }>(`/products?${q.toString()}`);
+      set({ products: res.products, loading: false, query: query || "", category: cat || "" });
+    } catch (_e) {
+      set({ products: [], loading: false, query: query || "", category: cat || "" });
+    }
   },
 }));
