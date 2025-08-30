@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { User } from "../models/User";
 import { signJwt } from "../utils/jwt";
+import { requireAuth } from "../middlewares/auth";
 
 const router = Router();
 
