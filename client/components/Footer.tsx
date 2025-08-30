@@ -1,17 +1,20 @@
+import { useT } from "@/i18n";
+
 export default function Footer() {
+  const t = useT();
   return (
     <footer className="mt-16 border-t bg-gradient-to-b from-secondary/60 to-background">
       <div className="container grid gap-8 py-12 md:grid-cols-4">
         <div>
-          <div className="text-2xl font-extrabold text-primary">KhetKart</div>
-          <p className="mt-2 text-sm text-muted-foreground">Fresh farm delivery: vegetables, fruits, milk, and more. Support local farmers.</p>
+          <div className="text-2xl font-extrabold text-primary">{t("app_name")}</div>
+          <p className="mt-2 text-sm text-muted-foreground">{t("footer_about")}</p>
         </div>
         <div>
-          <div className="font-semibold">About</div>
+          <div className="font-semibold">{t("about")}</div>
           <ul className="mt-2 space-y-1 text-sm text-muted-foreground">
-            <li><a href="#">About Us</a></li>
-            <li><a href="#">Contact</a></li>
-            <li><a href="#">Terms</a></li>
+            <li><a href="#">{t("about")}</a></li>
+            <li><a href="#">{t("contact")}</a></li>
+            <li><a href="#">{t("terms")}</a></li>
           </ul>
         </div>
         <div>
@@ -23,8 +26,8 @@ export default function Footer() {
           </ul>
         </div>
         <div>
-          <div className="font-semibold">Languages</div>
-          <div className="mt-2 text-sm text-muted-foreground">English / हिन्दी</div>
+          <div className="font-semibold">{t("languages")}</div>
+          <div className="mt-2 text-sm text-muted-foreground">{t("english")} / {t("hindi")}</div>
         </div>
       </div>
     </footer>
