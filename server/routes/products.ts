@@ -6,12 +6,13 @@ const router = Router();
 
 // Public list with filters and search
 router.get("/", async (req, res) => {
-  const { q, category, minPrice, maxPrice, discountOnly, published } = req.query as Record<string, string>;
+  const { q, category, minPrice, maxPrice, discountOnly, published, inStock } = req.query as Record<string, string>;
   const filter: any = {};
-  if (q) filter.$text = { $search: q };
+  if (q) filter.title = new RegExp(`^${q}`, "i");
   if (category) filter.category = category;
   if (typeof published !== "undefined") filter.isPublished = published === "true";
   if (discountOnly === "true") filter.discountPrice = { $exists: true, $ne: null };
+  if (inStock === "true") filter.stock = { $gt: 0 };
   const price: any = {};
   if (minPrice) price.$gte = Number(minPrice);
   if (maxPrice) price.$lte = Number(maxPrice);
