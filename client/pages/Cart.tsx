@@ -13,9 +13,9 @@ export default function Cart() {
     <div>
       <Navbar />
       <main className="container py-8">
-        <h1 className="mb-4 text-2xl font-bold">Cart</h1>
+        <h1 className="mb-4 text-2xl font-bold">{tr("cart")}</h1>
         {items.length === 0 ? (
-          <div className="text-muted-foreground">Your cart is empty. <Link className="underline" to="/">Shop now</Link></div>
+          <div className="text-muted-foreground">{tr("cart_empty")} <Link className="underline" to="/">{tr("shop_now")}</Link></div>
         ) : (
           <div className="grid gap-6 md:grid-cols-3">
             <div className="md:col-span-2 space-y-4">
@@ -38,9 +38,9 @@ export default function Cart() {
               <Button variant="secondary" onClick={clear}>Clear</Button>
             </div>
             <div className="rounded border p-4">
-              <div className="flex justify-between"><span>Subtotal</span><span>₹{t}</span></div>
-              <div className="mt-1 text-sm text-muted-foreground">Delivery calculated at checkout</div>
-              <Button className="mt-4 w-full" onClick={() => nav("/checkout")}>Checkout</Button>
+              <div className="flex justify-between"><span>{tr("subtotal")}</span><span>₹{amount}</span></div>
+              <div className="mt-1 text-sm text-muted-foreground">{tr("delivery_calc")}</div>
+              <Button className="mt-4 w-full" onClick={() => nav("/checkout")}>{tr("checkout")}</Button>
             </div>
           </div>
         )}
