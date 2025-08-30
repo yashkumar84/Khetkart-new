@@ -19,7 +19,12 @@ export default function FarmerDashboard() {
     const res = await api<{ products: Product[] }>("/farmer/my-products", { auth: true });
     setRows(res.products);
   }
-  useEffect(() => { load(); }, []);
+  // Only load when role is farmer; prevents unauthorized fetch before redirect
+  useEffect(() => {
+    const token = localStorage.getItem("kk_token");
+    if (!token) return;
+    load();
+  }, []);
 
   return (
     <ProtectedRoute role="farmer">
