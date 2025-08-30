@@ -21,8 +21,17 @@ export default function Index() {
             <div>
               <h1 className="text-4xl font-extrabold tracking-tight text-foreground">{t("hero_title")}</h1>
               <p className="mt-3 text-muted-foreground">{t("hero_sub")}</p>
+              <div className="mt-6 grid grid-cols-3 gap-3 text-center text-sm">
+                <div className="rounded-lg bg-background/60 p-3 shadow-sm">🚚 Fast Delivery</div>
+                <div className="rounded-lg bg-background/60 p-3 shadow-sm">🥬 Fresh from Farms</div>
+                <div className="rounded-lg bg-background/60 p-3 shadow-sm">💰 Best Prices</div>
+              </div>
             </div>
-            <div className="aspect-[16/9] rounded-xl bg-[url('https://images.unsplash.com/photo-1501004318641-b39e6451bec6?q=80&w=1920&auto=format&fit=crop')] bg-cover bg-center" />
+            <div className="space-y-3">
+              <div className="aspect-[16/9] rounded-xl bg-[url('https://images.unsplash.com/photo-1501004318641-b39e6451bec6?q=80&w=1920&auto=format&fit=crop')] bg-cover bg-center" />
+              <div className="aspect-[16/9] rounded-xl bg-[url('https://images.unsplash.com/photo-1511690656952-34342bb7c2f0?q=80&w=1920&auto=format&fit=crop')] bg-cover bg-center" />
+              <div className="aspect-[16/9] rounded-xl bg-[url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=1920&auto=format&fit=crop')] bg-cover bg-center" />
+            </div>
           </div>
         </section>
 
