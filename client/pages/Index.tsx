@@ -2,47 +2,39 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CategoryBar from "@/components/CategoryBar";
 import ProductCard from "@/components/ProductCard";
+import HomeHero from "@/components/HomeHero";
+import USPStrip from "@/components/USPStrip";
+import CategoryTiles from "@/components/CategoryTiles";
 import { useEffect } from "react";
 import { useProducts } from "@/store/products";
 import { useT } from "@/i18n";
 
 export default function Index() {
-  const { products, fetch } = useProducts();
+  const { products, fetch, query } = useProducts() as any;
   const t = useT();
 
   useEffect(() => { fetch({}); }, [fetch]);
+
+  const emptySearch = Array.isArray(products) && products.length === 0 && (query?.length ?? 0) > 0;
 
   return (
     <div className="min-h-screen">
       <Navbar />
       <main className="container py-8 space-y-10">
-        <section className="overflow-hidden rounded-2xl bg-gradient-to-br from-primary/10 via-accent/20 to-secondary/40 p-8">
-          <div className="grid gap-8 md:grid-cols-2 items-center">
-            <div>
-              <h1 className="text-4xl font-extrabold tracking-tight text-foreground">{t("hero_title")}</h1>
-              <p className="mt-3 text-muted-foreground">{t("hero_sub")}</p>
-              <div className="mt-6 grid grid-cols-3 gap-3 text-center text-sm">
-                <div className="rounded-lg bg-background/60 p-3 shadow-sm">🚚 Fast Delivery</div>
-                <div className="rounded-lg bg-background/60 p-3 shadow-sm">🥬 Fresh from Farms</div>
-                <div className="rounded-lg bg-background/60 p-3 shadow-sm">💰 Best Prices</div>
-              </div>
-            </div>
-            <div className="space-y-3">
-              <div className="aspect-[16/9] rounded-xl bg-[url('https://images.unsplash.com/photo-1501004318641-b39e6451bec6?q=80&w=1920&auto=format&fit=crop')] bg-cover bg-center" />
-              <div className="aspect-[16/9] rounded-xl bg-[url('https://images.unsplash.com/photo-1511690656952-34342bb7c2f0?q=80&w=1920&auto=format&fit=crop')] bg-cover bg-center" />
-              <div className="aspect-[16/9] rounded-xl bg-[url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=1920&auto=format&fit=crop')] bg-cover bg-center" />
-            </div>
-          </div>
-        </section>
+        <HomeHero />
+        <USPStrip />
 
         <section className="space-y-4">
           <h2 className="text-xl font-semibold">{t("shop_by_category")}</h2>
           <CategoryBar />
+          <CategoryTiles />
         </section>
 
         <section className="space-y-4">
           <h2 className="text-xl font-semibold">{t("top_deals")}</h2>
-          {products.length === 0 ? (
+          {emptySearch ? (
+            <div className="rounded border p-6 text-center text-muted-foreground">No products found.</div>
+          ) : products.length === 0 ? (
             <div className="rounded border p-6 text-center">
               <div className="mb-2 font-semibold">{t("empty_products_title")}</div>
               <p className="mb-4 text-sm text-muted-foreground">{t("empty_products_sub")}</p>
@@ -60,11 +52,6 @@ export default function Index() {
               ))}
             </div>
           )}
-        </section>
-
-        <section className="rounded-xl border p-6 text-center">
-          <div className="text-lg font-semibold">{t("natural_fresh_local")}</div>
-          <p className="text-muted-foreground">{t("sourced_direct")}</p>
         </section>
       </main>
       <Footer />
