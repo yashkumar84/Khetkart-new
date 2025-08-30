@@ -30,6 +30,11 @@ export default function Cart() {
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
+                    <div className="flex items-center rounded border">
+                      <button className="px-2 py-1" onClick={() => dec(it.product._id)}>-</button>
+                      <div className="px-3">{it.quantity}</div>
+                      <button className="px-2 py-1" onClick={() => inc(it.product._id)}>+</button>
+                    </div>
                     <div className="font-bold">₹{(it.product.discountPrice ?? it.product.price) * it.quantity}</div>
                     <Button variant="ghost" onClick={() => remove(it.product._id)}>Remove</Button>
                   </div>
