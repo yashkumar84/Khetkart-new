@@ -27,11 +27,11 @@ export default function Login() {
           <CardContent className="space-y-4">
             {error && <div className="rounded bg-destructive/10 p-2 text-sm text-destructive">{error}</div>}
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email">{t("email")}</Label>
               <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password">{t("password")}</Label>
               <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
             </div>
           </CardContent>
@@ -47,10 +47,10 @@ export default function Login() {
                 }
               }}
             >
-              Continue
+              {t("continue")}
             </Button>
             <div className="text-center text-sm text-muted-foreground">
-              No account? <Link to="/register" className="underline">Register</Link>
+              No account? <Link to="/register" className="underline">{t("register")}</Link>
             </div>
             <div className="text-center text-xs text-muted-foreground">
               Demo: admin@khetkart.com / admin123 • user@khetkart.com / user123
