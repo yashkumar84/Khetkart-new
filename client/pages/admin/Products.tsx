@@ -4,11 +4,19 @@ import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface Product { _id: string; title: string; price: number; discountPrice?: number; isPublished: boolean; category: string }
 
 export default function AdminProducts() {
   const [rows, setRows] = useState<Product[]>([]);
+  const [title, setTitle] = useState("");
+  const [price, setPrice] = useState("");
+  const [discount, setDiscount] = useState("");
+  const [category, setCategory] = useState("Vegetables");
+  const [image, setImage] = useState("");
+  const [stock, setStock] = useState("10");
   async function load() { const res = await api<{ products: Product[] }>("/products", { auth: true }); setRows(res.products); }
   useEffect(() => { load(); }, []);
 
