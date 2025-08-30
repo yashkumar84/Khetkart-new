@@ -17,6 +17,8 @@ router.post("/", requireAuth, async (req, res) => {
   }));
   const total = dbItems.reduce((s, it) => s + it.price * it.quantity, 0);
   let discountTotal = 0;
+  let appliedCode: string | undefined;
+  let appliedPercent: number | undefined;
   if (couponCode) {
     const c = await Coupon.findOne({
       code: couponCode.toUpperCase(),
@@ -27,10 +29,14 @@ router.post("/", requireAuth, async (req, res) => {
         { expiresAt: { $gte: new Date() } },
       ],
     });
-    if (c) discountTotal = Math.round((total * c.discountPercent) / 100);
+    if (c) {
+      appliedCode = c.code;
+      appliedPercent = c.discountPercent;
+      discountTotal = Math.round((total * c.discountPercent) / 100);
+    }
   }
   const finalTotal = Math.max(0, total - discountTotal);
-  const order = await Order.create({ user: (req as any).user.id, items: dbItems, total, discountTotal, finalTotal, address, status: "Placed" });
+  const order = await Order.create({ user: (req as any).user.id, items: dbItems, total, discountTotal, finalTotal, couponCode: appliedCode, couponPercent: appliedPercent, address, status: "Placed" });
   res.status(201).json({ order });
 });
 
