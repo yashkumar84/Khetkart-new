@@ -7,6 +7,9 @@ import authRoutes from "./routes/auth";
 import productRoutes from "./routes/products";
 import orderRoutes from "./routes/orders";
 import userRoutes from "./routes/users";
+import seedRoutes from "./routes/seed";
+import farmerRoutes from "./routes/farmer";
+import deliveryRoutes from "./routes/delivery";
 
 const ensureDb: RequestHandler = async (_req, res, next) => {
   if (!process.env.MONGODB_URI) {
@@ -48,6 +51,9 @@ export function createServer() {
   app.use("/api/products", ensureDb, productRoutes);
   app.use("/api/orders", ensureDb, orderRoutes);
   app.use("/api/users", ensureDb, userRoutes);
+  app.use("/api/seed", ensureDb, seedRoutes);
+  app.use("/api/farmer", ensureDb, farmerRoutes);
+  app.use("/api/delivery", ensureDb, deliveryRoutes);
 
   return app;
 }
