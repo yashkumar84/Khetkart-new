@@ -21,8 +21,8 @@ const ensureDb: RequestHandler = async (_req, res, next) => {
       (global as any).__mongoConnected = true;
     }
     next();
-  } catch (e) {
-    next(e);
+  } catch (e: any) {
+    return res.status(503).json({ message: e?.message || "Database unavailable" });
   }
 };
 
