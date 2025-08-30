@@ -17,6 +17,7 @@ export default function Checkout() {
   const [address, setAddress] = useState("");
   const [coupon, setCoupon] = useState("");
   const [couponInfo, setCouponInfo] = useState<{ percent: number; amount: number } | null>(null);
+  const [couponError, setCouponError] = useState<string | null>(null);
   const [validating, setValidating] = useState(false);
   const nav = useNavigate();
   const t = useT();
