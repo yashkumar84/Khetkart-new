@@ -7,7 +7,8 @@ import { useT } from "@/i18n";
 export default function Cart() {
   const { items, remove, clear, total } = useCart();
   const nav = useNavigate();
-  const t = total();
+  const amount = total();
+  const tr = useT();
   return (
     <div>
       <Navbar />
