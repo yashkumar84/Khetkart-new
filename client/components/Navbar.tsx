@@ -37,7 +37,7 @@ export default function Navbar() {
           <Link to="/delivery" className="hover:text-primary">{t("nav_delivery")}</Link>
         </nav>
         <div className="ml-auto flex max-w-xl flex-1 items-center gap-2">
-          <Input name="q" value={q} onChange={(e) => setQ(e.target.value)} placeholder={t("search_placeholder")} />
+          <Input name="q" value={q} onChange={(e) => setQ(e.target.value)} placeholder={t("search_placeholder")} className="rounded-full" />
           <Select value={lang} onValueChange={(v) => setLang(v as any)}>
             <SelectTrigger className="w-28"><SelectValue /></SelectTrigger>
             <SelectContent>
