@@ -55,6 +55,7 @@ export function createServer() {
   app.use("/api/seed", ensureDb, seedRoutes);
   app.use("/api/farmer", ensureDb, farmerRoutes);
   app.use("/api/delivery", ensureDb, deliveryRoutes);
+  app.use("/api/coupons", ensureDb, couponRoutes);
 
   return app;
 }
