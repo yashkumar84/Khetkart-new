@@ -24,7 +24,10 @@ export default function ProductCard({ p }: { p: Product }) {
       <CardContent className="space-y-1 p-4">
         <div className="flex items-center justify-between">
           <h3 className="font-semibold line-clamp-1">{p.title}</h3>
-          {off > 0 && <Badge variant="secondary">{off}% OFF</Badge>}
+          <div className="flex items-center gap-2">
+            {off > 0 && <Badge variant="secondary">{off}% OFF</Badge>}
+            <button aria-label="wishlist" onClick={() => setWish(!wish)} className={`rounded p-1 ${wish ? "text-primary" : "text-muted-foreground"}`}><Heart className="h-4 w-4" fill={wish ? "currentColor" : "none"} /></button>
+          </div>
         </div>
         <div className="flex items-baseline gap-2">
           <div className="text-lg font-bold">₹{p.discountPrice ?? p.price}</div>
