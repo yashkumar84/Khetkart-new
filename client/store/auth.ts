@@ -19,7 +19,7 @@ interface AuthState {
   token: string | null;
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
-  register: (name: string, email: string, password: string) => Promise<void>;
+  register: (name: string, email: string, password: string, referralCode?: string | null) => Promise<void>;
   logout: () => void;
   setUser: (u: AuthUser | null, t?: string | null) => void;
   init: () => Promise<void>;
@@ -40,12 +40,26 @@ export const useAuth = create<AuthState>((set, get) => ({
     // personalize cart to this user
     useCart.getState().setOwner(res.user.id);
     set({ user: res.user, token: res.token, loading: false });
+    try {
+      const pending = localStorage.getItem("kk_pending_ref");
+      if (pending) {
+        const r = await api<{ coins: number }>("/referrals/apply", {
+          method: "POST",
+          auth: true,
+          body: JSON.stringify({ code: pending }),
+        });
+        set({ user: { ...res.user, coins: r.coins } as any });
+        localStorage.removeItem("kk_pending_ref");
+      }
+    } catch {
+      // ignore
+    }
   },
-  async register(name, email, password) {
+  async register(name, email, password, referralCode) {
     set({ loading: true });
     const res = await api<{ token: string; user: AuthUser }>("/auth/register", {
       method: "POST",
-      body: JSON.stringify({ name, email, password }),
+      body: JSON.stringify({ name, email, password, referralCode }),
     });
     localStorage.setItem("kk_token", res.token);
     // personalize cart to this user
