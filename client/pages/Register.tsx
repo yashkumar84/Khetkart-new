@@ -1,4 +1,4 @@
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import { useAuth } from "@/store/auth";
 import Navbar from "@/components/Navbar";
 import {
@@ -20,6 +20,7 @@ const schema = z.object({
   name: z.string().min(2, "Name too short"),
   email: z.string().email("Invalid email"),
   password: z.string().min(6, "Min 6 chars"),
+  referralCode: z.string().optional(),
 });
 
 type FormData = z.infer<typeof schema>;
@@ -28,13 +29,17 @@ export default function Register() {
   const { register: signup } = useAuth();
   const t = useT();
   const nav = useNavigate();
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const preRef = (params.get("ref") || "").toUpperCase();
   const { register, handleSubmit, formState } = useForm<FormData>({
     resolver: zodResolver(schema),
+    defaultValues: { referralCode: preRef || undefined },
   });
 
   async function onSubmit(values: FormData) {
     try {
-      await signup(values.name, values.email, values.password);
+      await signup(values.name, values.email, values.password, values.referralCode?.trim() || undefined);
       toast.success("Account created");
       nav("/");
     } catch (e: any) {
@@ -82,6 +87,10 @@ export default function Register() {
                     {formState.errors.password.message}
                   </div>
                 )}
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="referralCode">Referral code (optional)</Label>
+                <Input id="referralCode" placeholder="Enter referral code" {...register("referralCode")} className="uppercase" />
               </div>
               <Button type="submit" disabled={formState.isSubmitting}>
                 {formState.isSubmitting
