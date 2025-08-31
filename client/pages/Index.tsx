@@ -11,7 +11,13 @@ import { useProducts } from "@/store/products";
 import { useT } from "@/i18n";
 import { useCart } from "@/store/cart";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 
@@ -76,7 +82,9 @@ export default function Index() {
             <div>
               <Label>Category</Label>
               <Select value={cat} onValueChange={(v) => setCat(v)}>
-                <SelectTrigger className="w-40"><SelectValue placeholder="All" /></SelectTrigger>
+                <SelectTrigger className="w-40">
+                  <SelectValue placeholder="All" />
+                </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All</SelectItem>
                   <SelectItem value="Vegetables">Vegetables</SelectItem>
@@ -89,18 +97,29 @@ export default function Index() {
             </div>
             <div>
               <Label>Min Price</Label>
-              <Input type="number" value={minPrice} onChange={(e) => setMinPrice(e.target.value)} />
+              <Input
+                type="number"
+                value={minPrice}
+                onChange={(e) => setMinPrice(e.target.value)}
+              />
             </div>
             <div>
               <Label>Max Price</Label>
-              <Input type="number" value={maxPrice} onChange={(e) => setMaxPrice(e.target.value)} />
+              <Input
+                type="number"
+                value={maxPrice}
+                onChange={(e) => setMaxPrice(e.target.value)}
+              />
             </div>
             <div className="flex items-center gap-2">
               <Switch checked={inStock} onCheckedChange={setInStock} />
               <Label>In stock</Label>
             </div>
             <div className="flex items-center gap-2">
-              <Switch checked={discountOnly} onCheckedChange={setDiscountOnly} />
+              <Switch
+                checked={discountOnly}
+                onCheckedChange={setDiscountOnly}
+              />
               <Label>Discounts</Label>
             </div>
           </div>

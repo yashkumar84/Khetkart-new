@@ -33,7 +33,9 @@ export default function CategorySlider({
       q.set("page", "1");
       q.set("pageSize", "16");
       try {
-        const res = await api<{ products: Product[] }>(`/products?${q.toString()}`);
+        const res = await api<{ products: Product[] }>(
+          `/products?${q.toString()}`,
+        );
         setItems(res.products || []);
       } catch {
         setItems([]);
@@ -52,7 +54,10 @@ export default function CategorySlider({
         <Carousel>
           <CarouselContent>
             {items.map((p) => (
-              <CarouselItem key={p._id} className="basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/4">
+              <CarouselItem
+                key={p._id}
+                className="basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/4"
+              >
                 <ProductCard p={p} />
               </CarouselItem>
             ))}

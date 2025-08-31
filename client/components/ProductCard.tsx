@@ -51,7 +51,10 @@ export default function ProductCard({ p }: { p: Product }) {
           </div>
         </div>
         <div className="flex items-baseline gap-2">
-          <div className="text-lg font-bold">₹{p.discountPrice ?? p.price}{p.unit ? ` / ${p.unit}` : ""}</div>
+          <div className="text-lg font-bold">
+            ₹{p.discountPrice ?? p.price}
+            {p.unit ? ` / ${p.unit}` : ""}
+          </div>
           {p.discountPrice && (
             <div className="text-sm text-muted-foreground line-through">
               ₹{p.price}

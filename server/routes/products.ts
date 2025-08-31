@@ -6,8 +6,18 @@ const router = Router();
 
 // Public list with filters and search
 router.get("/", async (req, res) => {
-  const { q, category, minPrice, maxPrice, discountOnly, published, inStock, page, pageSize, sort } =
-    req.query as Record<string, string>;
+  const {
+    q,
+    category,
+    minPrice,
+    maxPrice,
+    discountOnly,
+    published,
+    inStock,
+    page,
+    pageSize,
+    sort,
+  } = req.query as Record<string, string>;
   const filter: any = {};
   if (q) filter.title = new RegExp(q, "i");
   if (category) filter.category = category;
@@ -33,7 +43,11 @@ router.get("/", async (req, res) => {
   const ps = Math.max(1, Math.min(60, Number(pageSize || 0)));
   if (p && ps) {
     const [list, total] = await Promise.all([
-      Product.find(filter).sort(sortBy).skip((p - 1) * ps).limit(ps).lean(),
+      Product.find(filter)
+        .sort(sortBy)
+        .skip((p - 1) * ps)
+        .limit(ps)
+        .lean(),
       Product.countDocuments(filter),
     ]);
     return res.json({ products: list, total, page: p, pageSize: ps });

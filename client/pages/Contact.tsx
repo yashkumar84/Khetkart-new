@@ -21,7 +21,10 @@ export default function Contact() {
           </div>
           <div className="space-y-1">
             <Label>Message</Label>
-            <textarea className="min-h-[120px] rounded border p-2" placeholder="How can we help?" />
+            <textarea
+              className="min-h-[120px] rounded border p-2"
+              placeholder="How can we help?"
+            />
           </div>
           <Button>Send</Button>
         </div>
