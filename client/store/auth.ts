@@ -10,6 +10,8 @@ export interface AuthUser {
   email: string;
   role: Role;
   avatar?: string;
+  coins?: number;
+  referralCode?: string | null;
 }
 
 interface AuthState {
