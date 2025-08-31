@@ -43,6 +43,7 @@ router.post(
       price,
       discountPrice,
       stock,
+      unit,
       category,
       isPublished,
     } = req.body;
