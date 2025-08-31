@@ -21,6 +21,8 @@ interface Product {
   price: number;
   category: string;
   isPublished: boolean;
+  unit?: string;
+  soldUnits?: number;
 }
 
 export default function FarmerDashboard() {
