@@ -226,7 +226,7 @@ export default function Referrals() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Referral history</CardTitle>
+            <CardTitle>Your referrals</CardTitle>
           </CardHeader>
           <CardContent>
             {loading ? (
