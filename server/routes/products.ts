@@ -86,6 +86,8 @@ router.post(
     } = req.body;
     if (!title || !price || !category)
       return res.status(400).json({ message: "Missing fields" });
+    const actor = (req as any).user;
+    const role = actor?.role;
     const created = await Product.create({
       title,
       description,
@@ -95,8 +97,10 @@ router.post(
       stock: stock ?? 0,
       category,
       unit,
-      isPublished: isPublished ?? false,
-      createdBy: (req as any).user.id,
+      isPublished: role === "admin" ? (typeof isPublished === "boolean" ? isPublished : true) : false,
+      publishRequested: role === "farmer" ? true : false,
+      isDeclined: false,
+      createdBy: actor.id,
     });
     res.status(201).json({ product: created });
   },
