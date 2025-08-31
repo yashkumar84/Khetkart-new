@@ -6,6 +6,9 @@ import HomeHero from "@/components/HomeHero";
 import USPStrip from "@/components/USPStrip";
 import CategoryTiles from "@/components/CategoryTiles";
 import CategorySlider from "@/components/CategorySlider";
+import ExtendedSearch from "@/components/ExtendedSearch";
+import PromoBanners from "@/components/PromoBanners";
+import WhyChooseUs from "@/components/WhyChooseUs";
 import { useEffect, useMemo, useState } from "react";
 import { useProducts } from "@/store/products";
 import { useT } from "@/i18n";
@@ -63,6 +66,7 @@ export default function Index() {
       <main className="container py-8 space-y-10">
         <HomeHero />
         <USPStrip />
+        <ExtendedSearch />
 
         <section className="space-y-4">
           <h2 className="text-xl font-semibold">{t("shop_by_category")}</h2>
@@ -76,54 +80,9 @@ export default function Index() {
         <CategorySlider title="Milk & Dairy" category="Milk" />
         <CategorySlider title="Best Deals" discountOnly />
 
-        {/* Quick filter grid */}
-        <section className="space-y-4">
-          <div className="flex items-end gap-3 flex-wrap">
-            <div>
-              <Label>Category</Label>
-              <Select value={cat} onValueChange={(v) => setCat(v)}>
-                <SelectTrigger className="w-40">
-                  <SelectValue placeholder="All" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All</SelectItem>
-                  <SelectItem value="Vegetables">Vegetables</SelectItem>
-                  <SelectItem value="Fruits">Fruits</SelectItem>
-                  <SelectItem value="Milk">Milk</SelectItem>
-                  <SelectItem value="Crops">Crops</SelectItem>
-                  <SelectItem value="Others">Others</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div>
-              <Label>Min Price</Label>
-              <Input
-                type="number"
-                value={minPrice}
-                onChange={(e) => setMinPrice(e.target.value)}
-              />
-            </div>
-            <div>
-              <Label>Max Price</Label>
-              <Input
-                type="number"
-                value={maxPrice}
-                onChange={(e) => setMaxPrice(e.target.value)}
-              />
-            </div>
-            <div className="flex items-center gap-2">
-              <Switch checked={inStock} onCheckedChange={setInStock} />
-              <Label>In stock</Label>
-            </div>
-            <div className="flex items-center gap-2">
-              <Switch
-                checked={discountOnly}
-                onCheckedChange={setDiscountOnly}
-              />
-              <Label>Discounts</Label>
-            </div>
-          </div>
+        <PromoBanners />
 
+        <section className="space-y-4">
           <h2 className="text-xl font-semibold">{t("top_deals")}</h2>
           {emptySearch ? (
             <div className="rounded border p-6 text-center text-muted-foreground">
@@ -131,12 +90,8 @@ export default function Index() {
             </div>
           ) : products.length === 0 ? (
             <div className="rounded border p-6 text-center">
-              <div className="mb-2 font-semibold">
-                {t("empty_products_title")}
-              </div>
-              <p className="mb-4 text-sm text-muted-foreground">
-                {t("empty_products_sub")}
-              </p>
+              <div className="mb-2 font-semibold">{t("empty_products_title")}</div>
+              <p className="mb-4 text-sm text-muted-foreground">{t("empty_products_sub")}</p>
               <button
                 className="inline-flex items-center rounded bg-primary px-4 py-2 text-primary-foreground"
                 onClick={async () => {
@@ -171,6 +126,8 @@ export default function Index() {
             </div>
           </section>
         )}
+
+        <WhyChooseUs />
       </main>
       <Footer />
     </div>
