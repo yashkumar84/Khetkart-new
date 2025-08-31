@@ -11,6 +11,8 @@ export interface Product {
   price: number;
   discountPrice?: number;
   stock: number;
+  unit?: string;
+  soldUnits?: number;
   category: Category;
   isPublished: boolean;
 }
@@ -24,6 +26,9 @@ interface State {
     q?: string;
     category?: Category | "";
     discountOnly?: boolean;
+    inStock?: boolean;
+    minPrice?: number;
+    maxPrice?: number;
   }) => Promise<void>;
 }
 
