@@ -10,6 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -29,6 +30,10 @@ interface Product {
   discountPrice?: number;
   isPublished: boolean;
   category: string;
+  images?: string[];
+  publishRequested?: boolean;
+  isDeclined?: boolean;
+  createdBy?: { name: string; email: string; role: string };
 }
 
 export default function AdminProducts() {
@@ -41,7 +46,7 @@ export default function AdminProducts() {
   const [stock, setStock] = useState("10");
   const [unit, setUnit] = useState("kg");
   async function load() {
-    const res = await api<{ products: Product[] }>("/products", { auth: true });
+    const res = await api<{ products: Product[] }>("/products?sort=created_desc", { auth: true });
     setRows(res.products);
   }
   useEffect(() => {
@@ -179,63 +184,77 @@ export default function AdminProducts() {
             </CardContent>
           </Card>
 
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Title</TableHead>
-                <TableHead>Price</TableHead>
-                <TableHead>Unit</TableHead>
-                <TableHead>Sold</TableHead>
-                <TableHead>Category</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Action</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {rows.map((p) => (
-                <TableRow key={p._id}>
-                  <TableCell>{p.title}</TableCell>
-                  <TableCell>₹{p.discountPrice ?? p.price}</TableCell>
-                  <TableCell>{p.unit || ""}</TableCell>
-                  <TableCell>{p.soldUnits ?? 0}</TableCell>
-                  <TableCell>{p.category}</TableCell>
-                  <TableCell>
-                    {p.isPublished ? "Published" : "Unpublished"}
-                  </TableCell>
-                  <TableCell>
-                    {p.isPublished ? (
-                      <Button
-                        size="sm"
-                        variant="secondary"
-                        onClick={async () => {
-                          await api(`/products/${p._id}/unpublish`, {
-                            method: "POST",
-                            auth: true,
-                          });
-                          load();
-                        }}
-                      >
-                        Unpublish
-                      </Button>
-                    ) : (
-                      <Button
-                        size="sm"
-                        onClick={async () => {
-                          await api(`/products/${p._id}/publish`, {
-                            method: "POST",
-                            auth: true,
-                          });
-                          load();
-                        }}
-                      >
-                        Publish
-                      </Button>
-                    )}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+          <Tabs defaultValue="all">
+            <TabsList>
+              <TabsTrigger value="all">All</TabsTrigger>
+              <TabsTrigger value="published">Published</TabsTrigger>
+              <TabsTrigger value="unpublished">Unpublished</TabsTrigger>
+              <TabsTrigger value="pending">Publish Requests</TabsTrigger>
+              <TabsTrigger value="declined">Declined</TabsTrigger>
+            </TabsList>
+            {([
+              ["all", rows],
+              ["published", rows.filter(p => p.isPublished)],
+              ["unpublished", rows.filter(p => !p.isPublished && !p.isDeclined)],
+              ["pending", rows.filter(p => p.publishRequested)],
+              ["declined", rows.filter(p => p.isDeclined)],
+            ] as const).map(([key, list]) => (
+              <TabsContent key={key} value={key} className="mt-4">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Product</TableHead>
+                      <TableHead>Price</TableHead>
+                      <TableHead>Unit</TableHead>
+                      <TableHead>Sold</TableHead>
+                      <TableHead>Category</TableHead>
+                      <TableHead>Author</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead>Action</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {list.map((p) => (
+                      <TableRow key={p._id}>
+                        <TableCell>
+                          <div className="flex items-center gap-3">
+                            {p.images && p.images[0] ? (
+                              // eslint-disable-next-line @next/next/no-img-element
+                              <img src={p.images[0]} alt={p.title} className="h-10 w-10 rounded object-cover" />
+                            ) : (
+                              <div className="h-10 w-10 rounded bg-muted" />
+                            )}
+                            <div>{p.title}</div>
+                          </div>
+                        </TableCell>
+                        <TableCell>₹{p.discountPrice ?? p.price}</TableCell>
+                        <TableCell>{(p as any).unit || ""}</TableCell>
+                        <TableCell>{(p as any).soldUnits ?? 0}</TableCell>
+                        <TableCell>{p.category}</TableCell>
+                        <TableCell>
+                          <div>{p.createdBy?.name || "-"}</div>
+                          <div className="text-xs text-muted-foreground">{p.createdBy?.email || ""}</div>
+                        </TableCell>
+                        <TableCell>
+                          {p.isDeclined ? "Declined" : p.isPublished ? "Published" : p.publishRequested ? "Pending" : "Unpublished"}
+                        </TableCell>
+                        <TableCell className="flex gap-2">
+                          {p.isPublished ? (
+                            <Button size="sm" variant="secondary" onClick={async () => { await api(`/products/${p._id}/unpublish`, { method: "POST", auth: true }); load(); }}>Unpublish</Button>
+                          ) : (
+                            <Button size="sm" onClick={async () => { await api(`/products/${p._id}/publish`, { method: "POST", auth: true }); load(); }}>Publish</Button>
+                          )}
+                          {!p.isPublished && (
+                            <Button size="sm" variant="outline" onClick={async () => { await api(`/products/${p._id}/decline`, { method: "POST", auth: true }); load(); }}>Decline</Button>
+                          )}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TabsContent>
+            ))}
+          </Tabs>
         </main>
       </div>
     </ProtectedRoute>
