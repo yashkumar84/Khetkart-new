@@ -55,6 +55,9 @@ export function createServer() {
 
   app.get("/api/demo", handleDemo);
 
+  // Static files for uploads
+  app.use("/uploads", express.static("public/uploads"));
+
   // KhetKart API (DB required)
   app.use("/api/auth", ensureDb, authRoutes);
   app.use("/api/products", ensureDb, productRoutes);
@@ -64,6 +67,7 @@ export function createServer() {
   app.use("/api/farmer", ensureDb, farmerRoutes);
   app.use("/api/delivery", ensureDb, deliveryRoutes);
   app.use("/api/coupons", ensureDb, couponRoutes);
+  app.use("/api/upload", ensureDb, (await import("./routes/upload")).default);
 
   return app;
 }
