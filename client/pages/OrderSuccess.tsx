@@ -13,10 +13,7 @@ export default function OrderSuccess() {
     if (!orders.length) void mine();
   }, [orders.length]);
 
-  const order = useMemo(
-    () => orders.find((o) => o._id === id),
-    [orders, id],
-  );
+  const order = useMemo(() => orders.find((o) => o._id === id), [orders, id]);
 
   return (
     <div>
