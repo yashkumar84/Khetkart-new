@@ -9,6 +9,8 @@ export interface IProduct extends Document {
   price: number;
   discountPrice?: number;
   stock: number;
+  unit?: string;
+  soldUnits?: number;
   category: Category;
   isPublished: boolean;
   createdBy?: Types.ObjectId; // farmer/admin
@@ -22,6 +24,8 @@ const ProductSchema = new Schema<IProduct>(
     price: { type: Number, required: true, min: 0 },
     discountPrice: { type: Number, min: 0 },
     stock: { type: Number, default: 0 },
+    unit: { type: String, default: "" },
+    soldUnits: { type: Number, default: 0 },
     category: {
       type: String,
       enum: ["Vegetables", "Fruits", "Milk", "Crops", "Others"],
