@@ -65,6 +65,9 @@ export const useAuth = create<AuthState>((set, get) => ({
     const token = get().token;
     if (!token || get().user) return;
     try {
+      const { isApiAvailable } = await import("@/lib/api");
+      const ok = await isApiAvailable();
+      if (!ok) return;
       const res = await api<{ user: AuthUser }>("/auth/me", { auth: true });
       // bind cart to this user after refresh
       useCart.getState().setOwner(res.user.id);
