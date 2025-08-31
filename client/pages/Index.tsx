@@ -69,7 +69,7 @@ export default function Index() {
               <Select value={cat} onValueChange={(v) => setCat(v)}>
                 <SelectTrigger className="w-40"><SelectValue placeholder="All" /></SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All</SelectItem>
+                  <SelectItem value="all">All</SelectItem>
                   <SelectItem value="Vegetables">Vegetables</SelectItem>
                   <SelectItem value="Fruits">Fruits</SelectItem>
                   <SelectItem value="Milk">Milk</SelectItem>
