@@ -3,6 +3,21 @@ export interface ApiOptions extends RequestInit {
 }
 
 const API_BASE = "/api";
+let apiAvailable: boolean | null = null;
+
+export async function isApiAvailable(): Promise<boolean> {
+  if (apiAvailable !== null) return apiAvailable;
+  try {
+    const ctrl = new AbortController();
+    const t = setTimeout(() => ctrl.abort(), 2500);
+    const res = await fetch(`${API_BASE}/health`, { signal: ctrl.signal });
+    clearTimeout(t);
+    apiAvailable = res.ok;
+  } catch {
+    apiAvailable = false;
+  }
+  return apiAvailable;
+}
 
 export async function api<T>(
   path: string,
