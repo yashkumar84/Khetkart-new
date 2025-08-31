@@ -13,6 +13,8 @@ export interface IProduct extends Document {
   soldUnits?: number;
   category: Category;
   isPublished: boolean;
+  publishRequested?: boolean;
+  isDeclined?: boolean;
   createdBy?: Types.ObjectId; // farmer/admin
 }
 
@@ -33,6 +35,8 @@ const ProductSchema = new Schema<IProduct>(
       index: true,
     },
     isPublished: { type: Boolean, default: true },
+    publishRequested: { type: Boolean, default: false },
+    isDeclined: { type: Boolean, default: false },
     createdBy: { type: Schema.Types.ObjectId, ref: "User" },
   },
   { timestamps: true },
