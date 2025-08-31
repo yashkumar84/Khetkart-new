@@ -8,13 +8,26 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useT } from "@/i18n";
 import { api } from "@/lib/api";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
+
+const schema = z.object({
+  name: z.string().min(2, "Name too short"),
+  phone: z
+    .string()
+    .min(10, "Phone must be 10 digits")
+    .max(15)
+    .regex(/^\d{10,15}$/, "Phone must be digits"),
+  address: z.string().min(6, "Address too short"),
+});
+
+type FormData = z.infer<typeof schema>;
 
 export default function Checkout() {
   const { items, clear, total } = useCart();
   const { place } = useOrders();
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [address, setAddress] = useState("");
   const [coupon, setCoupon] = useState("");
   const [couponInfo, setCouponInfo] = useState<{
     percent: number;
@@ -26,6 +39,9 @@ export default function Checkout() {
   const t = useT();
   const [placing, setPlacing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { register, handleSubmit, formState, reset } = useForm<FormData>({
+    resolver: zodResolver(schema),
+  });
 
   const subtotal = useMemo(() => total(), [items]);
   const discount = couponInfo?.amount ?? 0;
@@ -35,19 +51,11 @@ export default function Checkout() {
     setCouponInfo(null);
   }, [coupon]);
 
-  async function handlePlaceOrder() {
+  async function onSubmit(values: FormData) {
     setError(null);
     if (!items.length) {
       setError("Cart is empty");
-      return;
-    }
-    if (!address.trim()) {
-      setError("Please enter delivery address");
-      return;
-    }
-    const token = localStorage.getItem("kk_token");
-    if (!token) {
-      nav("/login");
+      toast.error("Cart is empty");
       return;
     }
     setPlacing(true);
@@ -58,13 +66,16 @@ export default function Checkout() {
       }));
       const order = await place(
         payload,
-        address,
+        values.address,
         couponInfo ? coupon : undefined,
       );
       clear();
+      reset();
+      toast.success("Order placed");
       nav(`/order-success/${order._id}`);
     } catch (e: any) {
       setError(e?.message || "Failed to place order");
+      toast.error(e?.message || "Failed to place order");
     } finally {
       setPlacing(false);
     }
@@ -76,35 +87,39 @@ export default function Checkout() {
       <main className="container grid gap-6 py-8 md:grid-cols-3">
         <div className="md:col-span-2 space-y-6">
           <h1 className="text-2xl font-bold">{t("checkout")}</h1>
-          <div className="grid gap-4 md:grid-cols-2">
+          <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4 md:grid-cols-2">
             <div className="space-y-2">
               <Label htmlFor="name">{t("name")}</Label>
-              <Input
-                id="name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="John Doe"
-              />
+              <Input id="name" placeholder="John Doe" {...register("name")} />
+              {formState.errors.name && (
+                <div className="text-xs text-destructive">
+                  {formState.errors.name.message}
+                </div>
+              )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="phone">Phone</Label>
-              <Input
-                id="phone"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                placeholder="9999999999"
-              />
+              <Input id="phone" placeholder="9999999999" {...register("phone")} />
+              {formState.errors.phone && (
+                <div className="text-xs text-destructive">
+                  {formState.errors.phone.message}
+                </div>
+              )}
             </div>
             <div className="md:col-span-2 space-y-2">
               <Label htmlFor="address">{t("delivery_address")}</Label>
               <Input
                 id="address"
                 placeholder="House no, street, city"
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
+                {...register("address")}
               />
+              {formState.errors.address && (
+                <div className="text-xs text-destructive">
+                  {formState.errors.address.message}
+                </div>
+              )}
             </div>
-          </div>
+          </form>
 
           <div className="space-y-2">
             <Label htmlFor="coupon">{t("coupon")}</Label>
@@ -134,13 +149,18 @@ export default function Checkout() {
                         percent: res.discountPercent || 0,
                         amount: res.discountAmount || 0,
                       });
+                      toast.success("Coupon applied");
                     } else {
                       setCouponInfo(null);
-                      setCouponError(res.message || "Coupon is not valid");
+                      const msg = res.message || "Coupon is not valid";
+                      setCouponError(msg);
+                      toast.error(msg);
                     }
                   } catch (e: any) {
                     setCouponInfo(null);
-                    setCouponError(e?.message || "Coupon is not valid");
+                    const msg = e?.message || "Coupon is not valid";
+                    setCouponError(msg);
+                    toast.error(msg);
                   } finally {
                     setValidating(false);
                   }
@@ -154,6 +174,7 @@ export default function Checkout() {
                   onClick={() => {
                     setCouponInfo(null);
                     setCoupon("");
+                    toast("Coupon removed");
                   }}
                 >
                   Remove
@@ -198,8 +219,9 @@ export default function Checkout() {
           <div className="mt-4 space-y-2">
             <Button
               className="w-full"
+              type="submit"
               disabled={placing}
-              onClick={handlePlaceOrder}
+              onClick={handleSubmit(onSubmit)}
             >
               {placing ? "Placing..." : t("place_order_cod")}
             </Button>
