@@ -1,4 +1,5 @@
-import { useProducts, type Category } from "@/store/products";
+import type { Category } from "@/store/products";
+import { useNavigate } from "react-router-dom";
 
 const tiles: { key: Category; img: string }[] = [
   {
@@ -20,13 +21,13 @@ const tiles: { key: Category; img: string }[] = [
 ];
 
 export default function CategoryTiles() {
-  const { fetch } = useProducts();
+  const navigate = useNavigate();
   return (
     <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4">
       {tiles.map((t) => (
         <button
           key={t.key}
-          onClick={() => fetch({ category: t.key })}
+          onClick={() => navigate(`/shop?category=${encodeURIComponent(t.key)}`)}
           className="group overflow-hidden rounded-xl border text-left"
         >
           <div className="aspect-[4/3] overflow-hidden">
