@@ -34,8 +34,15 @@ export async function api<T>(
   }
   let res: Response;
   try {
-    res = await fetch(`${API_BASE}${path}`, { ...options, headers });
+    const ctrl = new AbortController();
+    const timeoutMs = 15000;
+    const t = setTimeout(() => ctrl.abort(), timeoutMs);
+    res = await fetch(`${API_BASE}${path}`, { ...options, headers, signal: ctrl.signal });
+    clearTimeout(t);
   } catch (e: any) {
+    if (e?.name === "AbortError") {
+      throw new Error("Request timed out. Please try again.");
+    }
     throw new Error(
       "Network error. Please check your connection and try again.",
     );
