@@ -133,7 +133,7 @@ router.post(
   async (req, res) => {
     const p = await Product.findByIdAndUpdate(
       req.params.id,
-      { isPublished: true },
+      { isPublished: true, publishRequested: false, isDeclined: false },
       { new: true },
     );
     if (!p) return res.status(404).json({ message: "Not found" });
