@@ -153,4 +153,37 @@ router.post(
   },
 );
 
+router.post("/decline-custom/:userId", requireAuth, requireRole("admin"), async (req, res) => {
+  const { userId } = req.params as { userId: string };
+  const user = await User.findById(userId);
+  if (!user) return res.status(404).json({ message: "Not found" });
+  user.requestedCodeStatus = "rejected" as any;
+  await user.save();
+  res.json({ ok: true });
+});
+
+router.get("/admin/list", requireAuth, requireRole("admin"), async (_req, res) => {
+  const list = await Referral.find({})
+    .sort({ createdAt: -1 })
+    .populate("referrer", "name email referralCode")
+    .populate("referred", "name email")
+    .lean();
+  res.json({ referrals: list });
+});
+
+router.get("/admin/overview", requireAuth, requireRole("admin"), async (_req, res) => {
+  const agg = await Referral.aggregate([
+    { $group: { _id: "$referrer", count: { $sum: 1 } } },
+    { $sort: { count: -1 } },
+  ]);
+  const users = await User.find({ _id: { $in: agg.map((a: any) => a._id) } })
+    .select("name email referralCode")
+    .lean();
+  const out = agg.map((a: any) => {
+    const u = users.find((x) => String(x._id) === String(a._id));
+    return { referrer: u, count: a.count };
+  });
+  res.json({ overview: out });
+});
+
 export default router;
