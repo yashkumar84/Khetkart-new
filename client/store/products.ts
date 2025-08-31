@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { api } from "@/lib/api";
+import { api, isApiAvailable } from "@/lib/api";
 
 export type Category = "Vegetables" | "Fruits" | "Milk" | "Crops" | "Others";
 
@@ -43,6 +43,8 @@ export const useProducts = create<State>((set, get) => ({
     if (params?.discountOnly) q.set("discountOnly", "true");
     q.set("published", "true");
     try {
+      const ok = await isApiAvailable();
+      if (!ok) throw new Error("API unavailable");
       const res = await api<{ products: Product[] }>(
         `/products?${q.toString()}`,
       );
