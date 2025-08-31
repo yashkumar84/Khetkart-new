@@ -31,6 +31,7 @@ export default function FarmerDashboard() {
   const [price, setPrice] = useState("");
   const [category, setCategory] = useState("Vegetables");
   const [image, setImage] = useState("");
+  const [unit, setUnit] = useState("kg");
 
   async function load() {
     const res = await api<{ products: Product[] }>("/farmer/my-products", {
@@ -72,6 +73,10 @@ export default function FarmerDashboard() {
               />
             </div>
             <div className="space-y-2">
+              <Label>Unit (e.g., kg, pcs, L)</Label>
+              <Input value={unit} onChange={(e) => setUnit(e.target.value)} />
+            </div>
+            <div className="space-y-2">
               <Label>Image</Label>
               <Input
                 placeholder="Image URL (or upload below)"
@@ -110,6 +115,7 @@ export default function FarmerDashboard() {
                       title,
                       price: Number(price),
                       category,
+                      unit,
                       images: img ? [img] : [],
                       stock: 10,
                       isPublished: false,
@@ -146,6 +152,8 @@ export default function FarmerDashboard() {
                 <TableRow>
                   <TableHead>Title</TableHead>
                   <TableHead>Price</TableHead>
+                  <TableHead>Unit</TableHead>
+                  <TableHead>Sold</TableHead>
                   <TableHead>Category</TableHead>
                   <TableHead>Status</TableHead>
                 </TableRow>
@@ -155,6 +163,8 @@ export default function FarmerDashboard() {
                   <TableRow key={p._id}>
                     <TableCell>{p.title}</TableCell>
                     <TableCell>₹{p.price}</TableCell>
+                    <TableCell>{p.unit || ""}</TableCell>
+                    <TableCell>{p.soldUnits ?? 0}</TableCell>
                     <TableCell>{p.category}</TableCell>
                     <TableCell>
                       {p.isPublished ? "Published" : "Pending"}
