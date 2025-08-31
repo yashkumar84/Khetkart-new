@@ -17,6 +17,8 @@ export interface IUser extends Document {
   coins: number;
   referralCode?: string | null;
   referredBy?: Schema.Types.ObjectId | null;
+  requestedCode?: string | null;
+  requestedCodeStatus?: "pending" | "approved" | "rejected" | null;
   comparePassword(candidate: string): Promise<boolean>;
 }
 
@@ -40,6 +42,8 @@ const UserSchema = new Schema<IUser>(
     coins: { type: Number, default: 0 },
     referralCode: { type: String, default: null, unique: true, sparse: true },
     referredBy: { type: Schema.Types.ObjectId, ref: "User", default: null },
+    requestedCode: { type: String, default: null },
+    requestedCodeStatus: { type: String, enum: ["pending", "approved", "rejected"], default: null },
   },
   { timestamps: true },
 );
