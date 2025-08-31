@@ -47,15 +47,21 @@ export default function Navbar() {
           <Link to="/" className="hover:text-primary">
             {t("nav_home")}
           </Link>
-          <Link to="/admin" className="hover:text-primary">
-            {t("nav_admin")}
-          </Link>
-          <Link to="/farmer" className="hover:text-primary">
-            {t("nav_farmer")}
-          </Link>
-          <Link to="/delivery" className="hover:text-primary">
-            {t("nav_delivery")}
-          </Link>
+          {user?.role === "admin" && (
+            <Link to="/admin" className="hover:text-primary">
+              {t("nav_admin")}
+            </Link>
+          )}
+          {user?.role === "farmer" && (
+            <Link to="/farmer" className="hover:text-primary">
+              {t("nav_farmer")}
+            </Link>
+          )}
+          {user?.role === "delivery" && (
+            <Link to="/delivery" className="hover:text-primary">
+              {t("nav_delivery")}
+            </Link>
+          )}
         </nav>
         <div className="ml-auto flex max-w-xl flex-1 items-center gap-2">
           <Input
