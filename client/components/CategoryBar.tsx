@@ -1,26 +1,30 @@
 import { Button } from "@/components/ui/button";
-import { useProducts, type Category } from "@/store/products";
+import type { Category } from "@/store/products";
 import { useT } from "@/i18n";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const cats: Category[] = ["Vegetables", "Fruits", "Milk", "Crops", "Others"];
 
 export default function CategoryBar() {
-  const { fetch, category } = useProducts();
   const t = useT();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const active = (params.get("category") as Category | null) || "";
   return (
     <div className="flex flex-wrap gap-2">
       {cats.map((c) => (
         <Button
           key={c}
-          variant={category === c ? "default" : "secondary"}
-          onClick={() => fetch({ category: c })}
+          variant={active === c ? "default" : "secondary"}
+          onClick={() => navigate(`/shop?category=${encodeURIComponent(c)}`)}
         >
           {t(`cat_${c}`)}
         </Button>
       ))}
       <Button
-        variant={!category ? "default" : "secondary"}
-        onClick={() => fetch({ category: "" as any })}
+        variant={!active ? "default" : "secondary"}
+        onClick={() => navigate("/shop")}
       >
         {t("all")}
       </Button>
