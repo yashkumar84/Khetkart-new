@@ -52,6 +52,12 @@ export default function Navbar() {
           <Link to="/" className="hover:text-primary">
             {t("nav_home")}
           </Link>
+          <Link to="/about" className="hover:text-primary">
+            About
+          </Link>
+          <Link to="/contact" className="hover:text-primary">
+            Contact
+          </Link>
           {user?.role === "admin" && (
             <Link to="/admin" className="hover:text-primary">
               {t("nav_admin")}
