@@ -39,6 +39,7 @@ export default function AdminProducts() {
   const [category, setCategory] = useState("Vegetables");
   const [image, setImage] = useState("");
   const [stock, setStock] = useState("10");
+  const [unit, setUnit] = useState("kg");
   async function load() {
     const res = await api<{ products: Product[] }>("/products", { auth: true });
     setRows(res.products);
@@ -100,6 +101,11 @@ export default function AdminProducts() {
                 onChange={() => {}}
               />
               <Input
+                placeholder="Unit (e.g., kg, pcs, L)"
+                value={unit}
+                onChange={(e) => setUnit(e.target.value)}
+              />
+              <Input
                 placeholder="Stock"
                 type="number"
                 value={stock}
@@ -141,6 +147,7 @@ export default function AdminProducts() {
                             : undefined,
                           category,
                           images: img ? [img] : [],
+                          unit,
                           stock: Number(stock),
                           isPublished: false,
                         }),
@@ -177,6 +184,8 @@ export default function AdminProducts() {
               <TableRow>
                 <TableHead>Title</TableHead>
                 <TableHead>Price</TableHead>
+                <TableHead>Unit</TableHead>
+                <TableHead>Sold</TableHead>
                 <TableHead>Category</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead>Action</TableHead>
@@ -187,6 +196,8 @@ export default function AdminProducts() {
                 <TableRow key={p._id}>
                   <TableCell>{p.title}</TableCell>
                   <TableCell>₹{p.discountPrice ?? p.price}</TableCell>
+                  <TableCell>{p.unit || ""}</TableCell>
+                  <TableCell>{p.soldUnits ?? 0}</TableCell>
                   <TableCell>{p.category}</TableCell>
                   <TableCell>
                     {p.isPublished ? "Published" : "Unpublished"}
