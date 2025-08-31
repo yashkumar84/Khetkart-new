@@ -19,9 +19,10 @@ interface AuthState {
   register: (name: string, email: string, password: string) => Promise<void>;
   logout: () => void;
   setUser: (u: AuthUser | null, t?: string | null) => void;
+  init: () => Promise<void>;
 }
 
-export const useAuth = create<AuthState>((set) => ({
+export const useAuth = create<AuthState>((set, get) => ({
   user: null,
   token:
     typeof window !== "undefined" ? localStorage.getItem("kk_token") : null,
@@ -59,5 +60,20 @@ export const useAuth = create<AuthState>((set) => ({
     // when auth user changes, bind cart to that user (or clear if null)
     useCart.getState().setOwner(u?.id ?? null);
     set({ user: u, token: t ?? null });
+  },
+  async init() {
+    const token = get().token;
+    if (!token || get().user) return;
+    try {
+      const res = await api<{ user: AuthUser }>("/auth/me", { auth: true });
+      // bind cart to this user after refresh
+      useCart.getState().setOwner(res.user.id);
+      set({ user: res.user });
+    } catch {
+      // invalid token; cleanup
+      localStorage.removeItem("kk_token");
+      useCart.getState().setOwner(null);
+      set({ user: null, token: null });
+    }
   },
 }));
