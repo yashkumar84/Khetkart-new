@@ -29,14 +29,16 @@ export default function Navbar() {
   const [q, setQ] = useState("");
   const dq = useDebounce(q, 400);
 
+  const location = useLocation();
   useEffect(() => {
     const query = dq.trim();
     if (query.length === 0) {
+      // show all without redirecting
       fetch({ q: "" });
-    } else {
-      fetch({ q: query });
+      return;
     }
-    navigate("/");
+    fetch({ q: query });
+    if (location.pathname !== "/") navigate("/");
   }, [dq]);
 
   return (
