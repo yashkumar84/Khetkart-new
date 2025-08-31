@@ -12,7 +12,7 @@ export default function ExtendedSearch() {
     if (e) e.preventDefault();
     const params = new URLSearchParams();
     if (q.trim()) params.set("q", q.trim());
-    if (cat) params.set("category", cat);
+    if (cat && cat !== "all") params.set("category", cat);
     navigate(params.toString() ? `/shop?${params.toString()}` : "/shop");
   }
   return (
