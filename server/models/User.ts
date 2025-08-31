@@ -14,6 +14,9 @@ export interface IUser extends Document {
   avatar?: string;
   resetToken?: string | null;
   resetExpires?: Date | null;
+  coins: number;
+  referralCode?: string | null;
+  referredBy?: Schema.Types.ObjectId | null;
   comparePassword(candidate: string): Promise<boolean>;
 }
 
@@ -34,6 +37,9 @@ const UserSchema = new Schema<IUser>(
     avatar: { type: String },
     resetToken: { type: String, default: null },
     resetExpires: { type: Date, default: null },
+    coins: { type: Number, default: 0 },
+    referralCode: { type: String, default: null, unique: true, sparse: true },
+    referredBy: { type: Schema.Types.ObjectId, ref: "User", default: null },
   },
   { timestamps: true },
 );
