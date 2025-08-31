@@ -11,6 +11,7 @@ import type { Product } from "@/store/products";
 import { useCart } from "@/store/cart";
 import { Heart } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 
 export default function ProductCard({ p }: { p: Product }) {
   const { add } = useCart();
