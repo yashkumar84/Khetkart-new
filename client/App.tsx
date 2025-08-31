@@ -39,6 +39,9 @@ const App = () => {
   useEffect(() => {
     // initialize auth from token on first load
     useAuth.getState().init?.();
+    const params = new URLSearchParams(window.location.search);
+    const ref = (params.get("ref") || "").toUpperCase();
+    if (ref) localStorage.setItem("kk_pending_ref", ref);
   }, []);
   return (
     <QueryClientProvider client={queryClient}>
