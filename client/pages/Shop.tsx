@@ -6,6 +6,7 @@ import { api, isApiAvailable } from "@/lib/api";
 import type { Product, Category } from "@/store/products";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useLocation } from "react-router-dom";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import {
@@ -39,6 +40,7 @@ export default function Shop() {
   const [maxPrice, setMaxPrice] = useState<string>("");
   const [sort, setSort] = useState("created_desc");
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const location = useLocation();
 
   const selectedCategory = useMemo(() => {
     const keys = Object.keys(categories).filter((k) => (categories as any)[k]);
@@ -89,6 +91,20 @@ export default function Shop() {
     load();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [q, selectedCategory, inStock, discountOnly, minPrice, maxPrice]);
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const qp = params.get("q") || "";
+    const cat = (params.get("category") as Category | null) || "";
+    setQ(qp);
+    setCategories((prev) => {
+      const next: any = { ...prev };
+      Object.keys(next).forEach((k) => (next[k] = false));
+      if (cat && next.hasOwnProperty(cat)) next[cat] = true;
+      return next;
+    });
+    setPage(1);
+  }, [location.search]);
 
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
 
