@@ -98,6 +98,22 @@ router.post("/login", async (req, res) => {
     if (!user) return res.status(401).json({ message: "Invalid credentials" });
     const ok = await user.comparePassword(password);
     if (!ok) return res.status(401).json({ message: "Invalid credentials" });
+
+    // ensure referral code exists for returning users
+    if (!(user as any).referralCode) {
+      function genCode(base: string) {
+        const clean = (base || "KK").replace(/[^a-z0-9]/gi, "").slice(0, 6).toUpperCase();
+        const suffix = Math.random().toString(36).slice(2, 6).toUpperCase();
+        return `${clean}${suffix}`;
+      }
+      let code = genCode(user.name);
+      while (await User.findOne({ referralCode: code })) {
+        code = genCode(user.name);
+      }
+      (user as any).referralCode = code;
+      await user.save();
+    }
+
     const token = signJwt({ sub: user.id, role: user.role });
     res.json({
       token,
