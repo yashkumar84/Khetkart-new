@@ -1,4 +1,4 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/store/auth";
 import { useUI } from "@/store/ui";
 import { useProducts } from "@/store/products";
@@ -15,7 +15,6 @@ import {
 import { Sun, Moon, ShoppingCart, User } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useState, useEffect } from "react";
-import { useDebounce } from "@/hooks/useDebounce";
 import { useT } from "@/i18n";
 import { toast } from "sonner";
 
@@ -27,19 +26,12 @@ export default function Navbar() {
   const { items } = useCart();
   const t = useT();
   const [q, setQ] = useState("");
-  const dq = useDebounce(q, 400);
 
-  const location = useLocation();
-  useEffect(() => {
-    const query = dq.trim();
-    if (query.length === 0) {
-      // show all without redirecting
-      fetch({ q: "" });
-      return;
-    }
-    fetch({ q: query });
-    if (location.pathname !== "/") navigate("/");
-  }, [dq]);
+  function submitSearch(e?: React.FormEvent) {
+    if (e) e.preventDefault();
+    const query = q.trim();
+    navigate(query ? `/shop?q=${encodeURIComponent(query)}` : "/shop");
+  }
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur">
@@ -80,13 +72,16 @@ export default function Navbar() {
           )}
         </nav>
         <div className="ml-auto flex max-w-xl flex-1 items-center gap-2">
-          <Input
-            name="q"
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
-            placeholder={t("search_placeholder")}
-            className="rounded-full"
-          />
+          <form onSubmit={submitSearch} className="flex flex-1 items-center gap-2">
+            <Input
+              name="q"
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              placeholder={t("search_placeholder")}
+              className="rounded-full"
+            />
+            <Button type="submit" variant="secondary">Search</Button>
+          </form>
           <Select value={lang} onValueChange={(v) => setLang(v as any)}>
             <SelectTrigger className="w-28">
               <SelectValue />
