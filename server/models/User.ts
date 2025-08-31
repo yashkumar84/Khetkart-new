@@ -11,6 +11,9 @@ export interface IUser extends Document {
   role: UserRole;
   address?: string;
   isActive: boolean;
+  avatar?: string;
+  resetToken?: string | null;
+  resetExpires?: Date | null;
   comparePassword(candidate: string): Promise<boolean>;
 }
 
@@ -28,6 +31,9 @@ const UserSchema = new Schema<IUser>(
     },
     address: { type: String },
     isActive: { type: Boolean, default: true },
+    avatar: { type: String },
+    resetToken: { type: String, default: null },
+    resetExpires: { type: Date, default: null },
   },
   { timestamps: true },
 );
