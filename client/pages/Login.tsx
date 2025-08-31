@@ -92,8 +92,15 @@ export default function Login() {
             <Button
               variant="outline"
               onClick={async () => {
-                await fetch("/api/auth/seed-demo", { method: "POST" });
-                toast.success("Seeded demo users (if they didn't exist)");
+                try {
+                  const { api, isApiAvailable } = await import("@/lib/api");
+                  const ok = await isApiAvailable();
+                  if (!ok) throw new Error("API unavailable");
+                  await api("/auth/seed-demo", { method: "POST" });
+                  toast.success("Seeded demo users (if they didn't exist)");
+                } catch (e: any) {
+                  toast.error(e?.message || "Failed to seed");
+                }
               }}
             >
               Seed demo users
