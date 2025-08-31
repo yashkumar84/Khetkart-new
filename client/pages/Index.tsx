@@ -5,6 +5,7 @@ import ProductCard from "@/components/ProductCard";
 import HomeHero from "@/components/HomeHero";
 import USPStrip from "@/components/USPStrip";
 import CategoryTiles from "@/components/CategoryTiles";
+import CategorySlider from "@/components/CategorySlider";
 import { useEffect, useMemo, useState } from "react";
 import { useProducts } from "@/store/products";
 import { useT } from "@/i18n";
@@ -63,6 +64,13 @@ export default function Index() {
           <CategoryTiles />
         </section>
 
+        {/* Featured sliders by category */}
+        <CategorySlider title="Fresh Vegetables" category="Vegetables" />
+        <CategorySlider title="Juicy Fruits" category="Fruits" />
+        <CategorySlider title="Milk & Dairy" category="Milk" />
+        <CategorySlider title="Best Deals" discountOnly />
+
+        {/* Quick filter grid */}
         <section className="space-y-4">
           <div className="flex items-end gap-3 flex-wrap">
             <div>
