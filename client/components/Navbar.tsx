@@ -54,6 +54,9 @@ export default function Navbar() {
           <Link to="/" className="hover:text-primary">
             {t("nav_home")}
           </Link>
+          <Link to="/shop" className="hover:text-primary">
+            Shop
+          </Link>
           <Link to="/about" className="hover:text-primary">
             About
           </Link>
