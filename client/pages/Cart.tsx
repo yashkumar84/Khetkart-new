@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
 import { useT } from "@/i18n";
 import { useAuth } from "@/store/auth";
+import { toast } from "sonner";
 
 export default function Cart() {
   const { items, remove, clear, total, inc, dec } = useCart();
@@ -67,14 +68,23 @@ export default function Cart() {
                     </div>
                     <Button
                       variant="ghost"
-                      onClick={() => remove(it.product._id)}
+                      onClick={() => {
+                        remove(it.product._id);
+                        toast("Removed from cart");
+                      }}
                     >
                       Remove
                     </Button>
                   </div>
                 </div>
               ))}
-              <Button variant="secondary" onClick={clear}>
+              <Button
+                variant="secondary"
+                onClick={() => {
+                  clear();
+                  toast("Cart cleared");
+                }}
+              >
                 Clear
               </Button>
             </div>
@@ -90,7 +100,7 @@ export default function Cart() {
                 className="mt-4 w-full"
                 onClick={() => nav(user ? "/checkout" : "/login")}
               >
-                {user ? tr("checkout") : "Login to checkout"}
+                {user ? tr("checkout") : "Login to continue"}
               </Button>
             </div>
           </div>
