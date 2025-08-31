@@ -3,18 +3,45 @@ import Navbar from "@/components/Navbar";
 import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 
-interface UserRow { _id: string; name: string; email: string; referralCode?: string | null; requestedCode?: string | null; requestedCodeStatus?: string | null; }
-interface ReferralRow { _id: string; code: string; createdAt: string; referrer?: { name: string; email: string; referralCode?: string }; referred?: { name: string; email: string }; rewardReferrer: number; rewardReferred: number; }
+interface UserRow {
+  _id: string;
+  name: string;
+  email: string;
+  referralCode?: string | null;
+  requestedCode?: string | null;
+  requestedCodeStatus?: string | null;
+}
+interface ReferralRow {
+  _id: string;
+  code: string;
+  createdAt: string;
+  referrer?: { name: string; email: string; referralCode?: string };
+  referred?: { name: string; email: string };
+  rewardReferrer: number;
+  rewardReferred: number;
+}
 
 export default function AdminReferrals() {
   const [pending, setPending] = useState<UserRow[]>([]);
   const [referrals, setReferrals] = useState<ReferralRow[]>([]);
-  const [overview, setOverview] = useState<{ referrer?: { name: string; email: string; referralCode?: string }; count: number }[]>([]);
+  const [overview, setOverview] = useState<
+    {
+      referrer?: { name: string; email: string; referralCode?: string };
+      count: number;
+    }[]
+  >([]);
   const [loading, setLoading] = useState(true);
   const [q, setQ] = useState("");
 
@@ -22,11 +49,27 @@ export default function AdminReferrals() {
     setLoading(true);
     try {
       const [usersRes, listRes, ovRes] = await Promise.all([
-        api<{ users: UserRow[]; total: number; page: number; pageSize: number }>("/users?page=1&pageSize=200", { auth: true }),
-        api<{ referrals: ReferralRow[] }>("/referrals/admin/list", { auth: true }),
-        api<{ overview: { referrer?: { name: string; email: string; referralCode?: string }; count: number }[] }>("/referrals/admin/overview", { auth: true }),
+        api<{
+          users: UserRow[];
+          total: number;
+          page: number;
+          pageSize: number;
+        }>("/users?page=1&pageSize=200", { auth: true }),
+        api<{ referrals: ReferralRow[] }>("/referrals/admin/list", {
+          auth: true,
+        }),
+        api<{
+          overview: {
+            referrer?: { name: string; email: string; referralCode?: string };
+            count: number;
+          }[];
+        }>("/referrals/admin/overview", { auth: true }),
       ]);
-      setPending((usersRes.users || []).filter(u => u.requestedCodeStatus === "pending"));
+      setPending(
+        (usersRes.users || []).filter(
+          (u) => u.requestedCodeStatus === "pending",
+        ),
+      );
       setReferrals(listRes.referrals || []);
       setOverview(ovRes.overview || []);
     } catch (e: any) {
@@ -36,7 +79,9 @@ export default function AdminReferrals() {
     }
   }
 
-  useEffect(() => { load(); }, []);
+  useEffect(() => {
+    load();
+  }, []);
 
   return (
     <ProtectedRoute role="admin">
@@ -46,7 +91,9 @@ export default function AdminReferrals() {
           <h1 className="text-2xl font-bold">Referrals</h1>
 
           <Card>
-            <CardHeader><CardTitle>Overview</CardTitle></CardHeader>
+            <CardHeader>
+              <CardTitle>Overview</CardTitle>
+            </CardHeader>
             <CardContent>
               {loading ? (
                 <div className="h-16 animate-pulse rounded bg-muted/30" />
@@ -64,7 +111,12 @@ export default function AdminReferrals() {
                   <TableBody>
                     {overview.map((o, i) => (
                       <TableRow key={i}>
-                        <TableCell>{o.referrer?.name} <div className="text-xs text-muted-foreground">{o.referrer?.email}</div></TableCell>
+                        <TableCell>
+                          {o.referrer?.name}{" "}
+                          <div className="text-xs text-muted-foreground">
+                            {o.referrer?.email}
+                          </div>
+                        </TableCell>
                         <TableCell>{o.referrer?.referralCode || "-"}</TableCell>
                         <TableCell>{o.count}</TableCell>
                       </TableRow>
@@ -76,10 +128,14 @@ export default function AdminReferrals() {
           </Card>
 
           <Card>
-            <CardHeader><CardTitle>Pending custom code requests</CardTitle></CardHeader>
+            <CardHeader>
+              <CardTitle>Pending custom code requests</CardTitle>
+            </CardHeader>
             <CardContent>
               {pending.length === 0 ? (
-                <div className="text-sm text-muted-foreground">No pending requests</div>
+                <div className="text-sm text-muted-foreground">
+                  No pending requests
+                </div>
               ) : (
                 <Table>
                   <TableHeader>
@@ -97,8 +153,33 @@ export default function AdminReferrals() {
                         <TableCell>{u.email}</TableCell>
                         <TableCell>{u.requestedCode}</TableCell>
                         <TableCell className="flex gap-2">
-                          <Button size="sm" onClick={async () => { await api(`/referrals/approve-custom/${u._id}`, { method: "POST", auth: true }); toast.success("Approved"); load(); }}>Approve</Button>
-                          <Button size="sm" variant="secondary" onClick={async () => { await api(`/referrals/decline-custom/${u._id}`, { method: "POST", auth: true }); toast.success("Declined"); load(); }}>Decline</Button>
+                          <Button
+                            size="sm"
+                            onClick={async () => {
+                              await api(`/referrals/approve-custom/${u._id}`, {
+                                method: "POST",
+                                auth: true,
+                              });
+                              toast.success("Approved");
+                              load();
+                            }}
+                          >
+                            Approve
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="secondary"
+                            onClick={async () => {
+                              await api(`/referrals/decline-custom/${u._id}`, {
+                                method: "POST",
+                                auth: true,
+                              });
+                              toast.success("Declined");
+                              load();
+                            }}
+                          >
+                            Decline
+                          </Button>
                         </TableCell>
                       </TableRow>
                     ))}
@@ -114,7 +195,11 @@ export default function AdminReferrals() {
             </CardHeader>
             <CardContent>
               <div className="mb-3 flex items-center gap-2">
-                <Input placeholder="Search by email" value={q} onChange={e => setQ(e.target.value)} />
+                <Input
+                  placeholder="Search by email"
+                  value={q}
+                  onChange={(e) => setQ(e.target.value)}
+                />
               </div>
               {loading ? (
                 <div className="h-24 animate-pulse rounded bg-muted/30" />
@@ -130,15 +215,36 @@ export default function AdminReferrals() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {referrals.filter(r => !q || r.referrer?.email?.includes(q) || r.referred?.email?.includes(q)).map(r => (
-                      <TableRow key={r._id}>
-                        <TableCell>{new Date(r.createdAt).toLocaleString()}</TableCell>
-                        <TableCell>{r.referrer?.name}<div className="text-xs text-muted-foreground">{r.referrer?.email}</div></TableCell>
-                        <TableCell>{r.code}</TableCell>
-                        <TableCell>{r.referred?.name}<div className="text-xs text-muted-foreground">{r.referred?.email}</div></TableCell>
-                        <TableCell>{r.rewardReferrer} / {r.rewardReferred}</TableCell>
-                      </TableRow>
-                    ))}
+                    {referrals
+                      .filter(
+                        (r) =>
+                          !q ||
+                          r.referrer?.email?.includes(q) ||
+                          r.referred?.email?.includes(q),
+                      )
+                      .map((r) => (
+                        <TableRow key={r._id}>
+                          <TableCell>
+                            {new Date(r.createdAt).toLocaleString()}
+                          </TableCell>
+                          <TableCell>
+                            {r.referrer?.name}
+                            <div className="text-xs text-muted-foreground">
+                              {r.referrer?.email}
+                            </div>
+                          </TableCell>
+                          <TableCell>{r.code}</TableCell>
+                          <TableCell>
+                            {r.referred?.name}
+                            <div className="text-xs text-muted-foreground">
+                              {r.referred?.email}
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            {r.rewardReferrer} / {r.rewardReferred}
+                          </TableCell>
+                        </TableRow>
+                      ))}
                   </TableBody>
                 </Table>
               )}

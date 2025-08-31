@@ -97,7 +97,12 @@ router.post(
       stock: stock ?? 0,
       category,
       unit,
-      isPublished: role === "admin" ? (typeof isPublished === "boolean" ? isPublished : true) : false,
+      isPublished:
+        role === "admin"
+          ? typeof isPublished === "boolean"
+            ? isPublished
+            : true
+          : false,
       publishRequested: role === "farmer" ? true : false,
       isDeclined: false,
       createdBy: actor.id,

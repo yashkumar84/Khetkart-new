@@ -37,7 +37,11 @@ export async function api<T>(
     const ctrl = new AbortController();
     const timeoutMs = 15000;
     const t = setTimeout(() => ctrl.abort(), timeoutMs);
-    res = await fetch(`${API_BASE}${path}`, { ...options, headers, signal: ctrl.signal });
+    res = await fetch(`${API_BASE}${path}`, {
+      ...options,
+      headers,
+      signal: ctrl.signal,
+    });
     clearTimeout(t);
   } catch (e: any) {
     if (e?.name === "AbortError") {

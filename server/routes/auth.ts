@@ -102,7 +102,10 @@ router.post("/login", async (req, res) => {
     // ensure referral code exists for returning users
     if (!(user as any).referralCode) {
       function genCode(base: string) {
-        const clean = (base || "KK").replace(/[^a-z0-9]/gi, "").slice(0, 6).toUpperCase();
+        const clean = (base || "KK")
+          .replace(/[^a-z0-9]/gi, "")
+          .slice(0, 6)
+          .toUpperCase();
         const suffix = Math.random().toString(36).slice(2, 6).toUpperCase();
         return `${clean}${suffix}`;
       }

@@ -46,7 +46,10 @@ export default function AdminProducts() {
   const [stock, setStock] = useState("10");
   const [unit, setUnit] = useState("kg");
   async function load() {
-    const res = await api<{ products: Product[] }>("/products?sort=created_desc", { auth: true });
+    const res = await api<{ products: Product[] }>(
+      "/products?sort=created_desc",
+      { auth: true },
+    );
     setRows(res.products);
   }
   useEffect(() => {
@@ -192,13 +195,18 @@ export default function AdminProducts() {
               <TabsTrigger value="pending">Publish Requests</TabsTrigger>
               <TabsTrigger value="declined">Declined</TabsTrigger>
             </TabsList>
-            {([
-              ["all", rows],
-              ["published", rows.filter(p => p.isPublished)],
-              ["unpublished", rows.filter(p => !p.isPublished && !p.isDeclined)],
-              ["pending", rows.filter(p => p.publishRequested)],
-              ["declined", rows.filter(p => p.isDeclined)],
-            ] as const).map(([key, list]) => (
+            {(
+              [
+                ["all", rows],
+                ["published", rows.filter((p) => p.isPublished)],
+                [
+                  "unpublished",
+                  rows.filter((p) => !p.isPublished && !p.isDeclined),
+                ],
+                ["pending", rows.filter((p) => p.publishRequested)],
+                ["declined", rows.filter((p) => p.isDeclined)],
+              ] as const
+            ).map(([key, list]) => (
               <TabsContent key={key} value={key} className="mt-4">
                 <Table>
                   <TableHeader>
@@ -220,7 +228,11 @@ export default function AdminProducts() {
                           <div className="flex items-center gap-3">
                             {p.images && p.images[0] ? (
                               // eslint-disable-next-line @next/next/no-img-element
-                              <img src={p.images[0]} alt={p.title} className="h-10 w-10 rounded object-cover" />
+                              <img
+                                src={p.images[0]}
+                                alt={p.title}
+                                className="h-10 w-10 rounded object-cover"
+                              />
                             ) : (
                               <div className="h-10 w-10 rounded bg-muted" />
                             )}
@@ -233,19 +245,62 @@ export default function AdminProducts() {
                         <TableCell>{p.category}</TableCell>
                         <TableCell>
                           <div>{p.createdBy?.name || "-"}</div>
-                          <div className="text-xs text-muted-foreground">{p.createdBy?.email || ""}</div>
+                          <div className="text-xs text-muted-foreground">
+                            {p.createdBy?.email || ""}
+                          </div>
                         </TableCell>
                         <TableCell>
-                          {p.isDeclined ? "Declined" : p.isPublished ? "Published" : p.publishRequested ? "Pending" : "Unpublished"}
+                          {p.isDeclined
+                            ? "Declined"
+                            : p.isPublished
+                              ? "Published"
+                              : p.publishRequested
+                                ? "Pending"
+                                : "Unpublished"}
                         </TableCell>
                         <TableCell className="flex gap-2">
                           {p.isPublished ? (
-                            <Button size="sm" variant="secondary" onClick={async () => { await api(`/products/${p._id}/unpublish`, { method: "POST", auth: true }); load(); }}>Unpublish</Button>
+                            <Button
+                              size="sm"
+                              variant="secondary"
+                              onClick={async () => {
+                                await api(`/products/${p._id}/unpublish`, {
+                                  method: "POST",
+                                  auth: true,
+                                });
+                                load();
+                              }}
+                            >
+                              Unpublish
+                            </Button>
                           ) : (
-                            <Button size="sm" onClick={async () => { await api(`/products/${p._id}/publish`, { method: "POST", auth: true }); load(); }}>Publish</Button>
+                            <Button
+                              size="sm"
+                              onClick={async () => {
+                                await api(`/products/${p._id}/publish`, {
+                                  method: "POST",
+                                  auth: true,
+                                });
+                                load();
+                              }}
+                            >
+                              Publish
+                            </Button>
                           )}
                           {!p.isPublished && (
-                            <Button size="sm" variant="outline" onClick={async () => { await api(`/products/${p._id}/decline`, { method: "POST", auth: true }); load(); }}>Decline</Button>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={async () => {
+                                await api(`/products/${p._id}/decline`, {
+                                  method: "POST",
+                                  auth: true,
+                                });
+                                load();
+                              }}
+                            >
+                              Decline
+                            </Button>
                           )}
                         </TableCell>
                       </TableRow>
