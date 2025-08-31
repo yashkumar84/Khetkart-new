@@ -114,7 +114,15 @@ export default function Navbar() {
                           : "/orders"
                   }
                 >
-                  <User className="mr-2 h-4 w-4" /> {user.name.split(" ")[0]}
+                  {user?.avatar ? (
+                    <Avatar className="mr-2 h-6 w-6">
+                      <AvatarImage src={user.avatar} alt={user.name} />
+                      <AvatarFallback>{user.name[0]}</AvatarFallback>
+                    </Avatar>
+                  ) : (
+                    <User className="mr-2 h-4 w-4" />
+                  )}
+                  {user.name.split(" ")[0]}
                 </Link>
               </Button>
               <Button asChild variant="outline">
