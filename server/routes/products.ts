@@ -6,10 +6,10 @@ const router = Router();
 
 // Public list with filters and search
 router.get("/", async (req, res) => {
-  const { q, category, minPrice, maxPrice, discountOnly, published, inStock } =
+  const { q, category, minPrice, maxPrice, discountOnly, published, inStock, page, pageSize, sort } =
     req.query as Record<string, string>;
   const filter: any = {};
-  if (q) filter.title = new RegExp(`^${q}`, "i");
+  if (q) filter.title = new RegExp(q, "i");
   if (category) filter.category = category;
   if (typeof published !== "undefined")
     filter.isPublished = published === "true";
@@ -20,8 +20,27 @@ router.get("/", async (req, res) => {
   if (minPrice) price.$gte = Number(minPrice);
   if (maxPrice) price.$lte = Number(maxPrice);
   if (Object.keys(price).length) filter.price = price;
-  const products = await Product.find(filter).sort({ createdAt: -1 }).lean();
-  res.json({ products });
+
+  const sortMap: Record<string, any> = {
+    created_desc: { createdAt: -1 },
+    created_asc: { createdAt: 1 },
+    price_asc: { price: 1 },
+    price_desc: { price: -1 },
+  };
+  const sortBy = sortMap[sort || "created_desc"] || { createdAt: -1 };
+
+  const p = Math.max(1, Number(page || 0));
+  const ps = Math.max(1, Math.min(60, Number(pageSize || 0)));
+  if (p && ps) {
+    const [list, total] = await Promise.all([
+      Product.find(filter).sort(sortBy).skip((p - 1) * ps).limit(ps).lean(),
+      Product.countDocuments(filter),
+    ]);
+    return res.json({ products: list, total, page: p, pageSize: ps });
+  }
+
+  const products = await Product.find(filter).sort(sortBy).lean();
+  res.json({ products, total: products.length });
 });
 
 router.get("/:id", async (req, res) => {
