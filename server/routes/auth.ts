@@ -33,6 +33,8 @@ router.post("/register", async (req, res) => {
         name: user.name,
         email: user.email,
         role: user.role,
+        coins: (user as any).coins || 0,
+        referralCode: (user as any).referralCode || null,
       },
     });
   } catch (e: any) {
@@ -55,6 +57,8 @@ router.post("/login", async (req, res) => {
         name: user.name,
         email: user.email,
         role: user.role,
+        coins: (user as any).coins || 0,
+        referralCode: (user as any).referralCode || null,
       },
     });
   } catch (e: any) {
