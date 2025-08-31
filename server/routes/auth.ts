@@ -119,6 +119,8 @@ router.get("/me", requireAuth, async (req, res) => {
       address: user.address,
       phone: user.phone,
       avatar: (user as any).avatar,
+      coins: (user as any).coins || 0,
+      referralCode: (user as any).referralCode || null,
     },
   });
 });
@@ -145,6 +147,8 @@ router.put("/me", requireAuth, async (req, res) => {
       address: user.address,
       phone: user.phone,
       avatar: (user as any).avatar,
+      coins: (user as any).coins || 0,
+      referralCode: (user as any).referralCode || null,
     },
   });
 });
