@@ -2,7 +2,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ProductCard from "@/components/ProductCard";
 import { useEffect, useMemo, useState } from "react";
-import { api } from "@/lib/api";
+import { api, isApiAvailable } from "@/lib/api";
 import type { Product, Category } from "@/store/products";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -52,6 +52,8 @@ export default function Shop() {
     params.set("pageSize", String(pageSize));
     params.set("sort", sort);
     try {
+      const ok = await isApiAvailable();
+      if (!ok) throw new Error("API unavailable");
       const res = await api<{ products: Product[]; total: number; page: number; pageSize: number }>(
         `/products?${params.toString()}`,
       );
