@@ -29,8 +29,9 @@ export default function Index() {
   }, [fetch]);
 
   useEffect(() => {
+    const category = cat === "all" ? "" : (cat as any);
     fetch({
-      category: (cat as any) || "",
+      category,
       inStock,
       discountOnly,
       minPrice: minPrice ? Number(minPrice) : undefined,
