@@ -3,9 +3,11 @@ import { useCart } from "@/store/cart";
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
 import { useT } from "@/i18n";
+import { useAuth } from "@/store/auth";
 
 export default function Cart() {
   const { items, remove, clear, total, inc, dec } = useCart();
+  const { user } = useAuth();
   const nav = useNavigate();
   const amount = total();
   const tr = useT();
@@ -84,8 +86,11 @@ export default function Cart() {
               <div className="mt-1 text-sm text-muted-foreground">
                 {tr("delivery_calc")}
               </div>
-              <Button className="mt-4 w-full" onClick={() => nav("/checkout")}>
-                {tr("checkout")}
+              <Button
+                className="mt-4 w-full"
+                onClick={() => nav(user ? "/checkout" : "/login")}
+              >
+                {user ? tr("checkout") : "Login to checkout"}
               </Button>
             </div>
           </div>
