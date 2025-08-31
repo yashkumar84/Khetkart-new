@@ -100,7 +100,12 @@ export default function Navbar() {
                   <User className="mr-2 h-4 w-4" /> {user.name.split(" ")[0]}
                 </Link>
               </Button>
-              <Button variant="ghost" onClick={logout}>
+              <Button
+                variant="ghost"
+                onClick={() => {
+                  logout();
+                }}
+              >
                 Logout
               </Button>
             </div>
