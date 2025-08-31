@@ -39,7 +39,12 @@ export default function Register() {
 
   async function onSubmit(values: FormData) {
     try {
-      await signup(values.name, values.email, values.password, values.referralCode?.trim() || undefined);
+      await signup(
+        values.name,
+        values.email,
+        values.password,
+        values.referralCode?.trim() || undefined,
+      );
       toast.success("Account created");
       nav("/");
     } catch (e: any) {
@@ -90,7 +95,12 @@ export default function Register() {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="referralCode">Referral code (optional)</Label>
-                <Input id="referralCode" placeholder="Enter referral code" {...register("referralCode")} className="uppercase" />
+                <Input
+                  id="referralCode"
+                  placeholder="Enter referral code"
+                  {...register("referralCode")}
+                  className="uppercase"
+                />
               </div>
               <Button type="submit" disabled={formState.isSubmitting}>
                 {formState.isSubmitting

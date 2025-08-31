@@ -8,7 +8,13 @@ const router = Router();
 
 router.post("/register", async (req, res) => {
   try {
-    const { name, email, password, role, referralCode: inputCode } = req.body as {
+    const {
+      name,
+      email,
+      password,
+      role,
+      referralCode: inputCode,
+    } = req.body as {
       name: string;
       email: string;
       password: string;
@@ -29,7 +35,10 @@ router.post("/register", async (req, res) => {
 
     // ensure user has a referral code by default
     function genCode(base: string) {
-      const clean = (base || "KK").replace(/[^a-z0-9]/gi, "").slice(0, 6).toUpperCase();
+      const clean = (base || "KK")
+        .replace(/[^a-z0-9]/gi, "")
+        .slice(0, 6)
+        .toUpperCase();
       const suffix = Math.random().toString(36).slice(2, 6).toUpperCase();
       return `${clean}${suffix}`;
     }
@@ -52,7 +61,8 @@ router.post("/register", async (req, res) => {
       if (referrer && String(referrer._id) !== String(user._id)) {
         (user as any).referredBy = referrer._id as any;
         (user as any).coins = ((user as any).coins || 0) + REFERRED_REWARD;
-        (referrer as any).coins = ((referrer as any).coins || 0) + REFERRER_REWARD;
+        (referrer as any).coins =
+          ((referrer as any).coins || 0) + REFERRER_REWARD;
         await Promise.all([user.save(), referrer.save()]);
         await Referral.create({
           code: codeIn,

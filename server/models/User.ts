@@ -43,7 +43,11 @@ const UserSchema = new Schema<IUser>(
     referralCode: { type: String, default: null, unique: true, sparse: true },
     referredBy: { type: Schema.Types.ObjectId, ref: "User", default: null },
     requestedCode: { type: String, default: null },
-    requestedCodeStatus: { type: String, enum: ["pending", "approved", "rejected"], default: null },
+    requestedCodeStatus: {
+      type: String,
+      enum: ["pending", "approved", "rejected"],
+      default: null,
+    },
   },
   { timestamps: true },
 );

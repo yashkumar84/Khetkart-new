@@ -19,7 +19,18 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Sun, Moon, ShoppingCart, User, Menu, LogOut, LayoutDashboard, Package, BadgeIndianRupee, ChevronDown } from "lucide-react";
+import {
+  Sun,
+  Moon,
+  ShoppingCart,
+  User,
+  Menu,
+  LogOut,
+  LayoutDashboard,
+  Package,
+  BadgeIndianRupee,
+  ChevronDown,
+} from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useState } from "react";
 import { useT } from "@/i18n";
@@ -53,7 +64,12 @@ export default function Navbar() {
             {t("app_name")}
           </Link>
           <nav className="hidden md:flex items-center gap-2 text-sm ml-4">
-            <Link to="/shop" className="rounded px-2 py-1 hover:bg-accent hover:text-accent-foreground">Shop</Link>
+            <Link
+              to="/shop"
+              className="rounded px-2 py-1 hover:bg-accent hover:text-accent-foreground"
+            >
+              Shop
+            </Link>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="gap-1">
@@ -91,7 +107,10 @@ export default function Navbar() {
         </div>
 
         {/* Center: desktop search */}
-        <form onSubmit={submitSearch} className="mx-auto hidden w-full max-w-xl items-center gap-2 md:flex">
+        <form
+          onSubmit={submitSearch}
+          className="mx-auto hidden w-full max-w-xl items-center gap-2 md:flex"
+        >
           <Input
             name="q"
             value={q}
@@ -99,22 +118,36 @@ export default function Navbar() {
             placeholder={t("search_placeholder")}
             className="rounded-full"
           />
-          <Button type="submit" variant="secondary">Search</Button>
+          <Button type="submit" variant="secondary">
+            Search
+          </Button>
         </form>
 
         {/* Right: actions */}
         <div className="ml-auto flex items-center gap-2 md:gap-3">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="hidden md:inline-flex">{lang.toUpperCase()}</Button>
+              <Button variant="ghost" className="hidden md:inline-flex">
+                {lang.toUpperCase()}
+              </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => setLang("en" as any)}>English</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setLang("hi" as any)}>Hindi</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setLang("en" as any)}>
+                English
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setLang("hi" as any)}>
+                Hindi
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
 
-          <Button type="button" variant="ghost" size="icon" onClick={toggleDark} aria-label="toggle theme">
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            onClick={toggleDark}
+            aria-label="toggle theme"
+          >
             {dark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
           </Button>
 
@@ -141,27 +174,51 @@ export default function Navbar() {
                   ) : (
                     <User className="h-4 w-4" />
                   )}
-                  <span className="hidden sm:inline">{user.name.split(" ")[0]}</span>
+                  <span className="hidden sm:inline">
+                    {user.name.split(" ")[0]}
+                  </span>
                   {typeof user.coins === "number" && (
-                    <span className="rounded-full border px-2 py-0.5 text-xs">{user.coins} <BadgeIndianRupee className="ml-1 inline h-3 w-3" /></span>
+                    <span className="rounded-full border px-2 py-0.5 text-xs">
+                      {user.coins}{" "}
+                      <BadgeIndianRupee className="ml-1 inline h-3 w-3" />
+                    </span>
                   )}
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuLabel>Account</DropdownMenuLabel>
                 <DropdownMenuItem asChild>
-                  <Link to={user.role === "admin" ? "/admin" : user.role === "farmer" ? "/farmer" : user.role === "delivery" ? "/delivery" : "/orders"}>
+                  <Link
+                    to={
+                      user.role === "admin"
+                        ? "/admin"
+                        : user.role === "farmer"
+                          ? "/farmer"
+                          : user.role === "delivery"
+                            ? "/delivery"
+                            : "/orders"
+                    }
+                  >
                     <LayoutDashboard className="mr-2 h-4 w-4" /> Dashboard
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link to="/profile"><User className="mr-2 h-4 w-4" /> Profile</Link>
+                  <Link to="/profile">
+                    <User className="mr-2 h-4 w-4" /> Profile
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link to="/referrals"><BadgeIndianRupee className="mr-2 h-4 w-4" /> Referrals</Link>
+                  <Link to="/referrals">
+                    <BadgeIndianRupee className="mr-2 h-4 w-4" /> Referrals
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => { logout(); toast.success("Logged out"); }}>
+                <DropdownMenuItem
+                  onClick={() => {
+                    logout();
+                    toast.success("Logged out");
+                  }}
+                >
                   <LogOut className="mr-2 h-4 w-4" /> Logout
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -184,7 +241,10 @@ export default function Navbar() {
                 <SheetTitle>{t("app_name")}</SheetTitle>
               </SheetHeader>
               <div className="mt-4 space-y-4">
-                <form onSubmit={submitSearch} className="flex items-center gap-2">
+                <form
+                  onSubmit={submitSearch}
+                  className="flex items-center gap-2"
+                >
                   <Input
                     name="q"
                     value={q}
@@ -192,28 +252,83 @@ export default function Navbar() {
                     placeholder={t("search_placeholder")}
                     className="rounded-full"
                   />
-                  <Button type="submit" variant="secondary">Go</Button>
+                  <Button type="submit" variant="secondary">
+                    Go
+                  </Button>
                 </form>
                 <div className="grid gap-2 text-sm">
-                  <Link to="/shop" className="rounded px-2 py-2 hover:bg-accent" onClick={() => navigate("/shop")}>Shop</Link>
-                  <Link to="/about" className="rounded px-2 py-2 hover:bg-accent">About</Link>
-                  <Link to="/contact" className="rounded px-2 py-2 hover:bg-accent">Contact</Link>
-                  <Link to="/referrals" className="rounded px-2 py-2 hover:bg-accent">Referrals</Link>
+                  <Link
+                    to="/shop"
+                    className="rounded px-2 py-2 hover:bg-accent"
+                    onClick={() => navigate("/shop")}
+                  >
+                    Shop
+                  </Link>
+                  <Link
+                    to="/about"
+                    className="rounded px-2 py-2 hover:bg-accent"
+                  >
+                    About
+                  </Link>
+                  <Link
+                    to="/contact"
+                    className="rounded px-2 py-2 hover:bg-accent"
+                  >
+                    Contact
+                  </Link>
+                  <Link
+                    to="/referrals"
+                    className="rounded px-2 py-2 hover:bg-accent"
+                  >
+                    Referrals
+                  </Link>
                   {user?.role === "admin" && (
-                    <Link to="/admin" className="rounded px-2 py-2 hover:bg-accent">{t("nav_admin")}</Link>
+                    <Link
+                      to="/admin"
+                      className="rounded px-2 py-2 hover:bg-accent"
+                    >
+                      {t("nav_admin")}
+                    </Link>
                   )}
                   {user?.role === "farmer" && (
-                    <Link to="/farmer" className="rounded px-2 py-2 hover:bg-accent">{t("nav_farmer")}</Link>
+                    <Link
+                      to="/farmer"
+                      className="rounded px-2 py-2 hover:bg-accent"
+                    >
+                      {t("nav_farmer")}
+                    </Link>
                   )}
                   {user?.role === "delivery" && (
-                    <Link to="/delivery" className="rounded px-2 py-2 hover:bg-accent">{t("nav_delivery")}</Link>
+                    <Link
+                      to="/delivery"
+                      className="rounded px-2 py-2 hover:bg-accent"
+                    >
+                      {t("nav_delivery")}
+                    </Link>
                   )}
                 </div>
                 <div className="flex items-center gap-2">
-                  <Button variant="outline" onClick={() => setLang("en" as any)} className={lang === "en" ? "border-primary" : ""}>EN</Button>
-                  <Button variant="outline" onClick={() => setLang("hi" as any)} className={lang === "hi" ? "border-primary" : ""}>HI</Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => setLang("en" as any)}
+                    className={lang === "en" ? "border-primary" : ""}
+                  >
+                    EN
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => setLang("hi" as any)}
+                    className={lang === "hi" ? "border-primary" : ""}
+                  >
+                    HI
+                  </Button>
                   <Button variant="ghost" onClick={toggleDark}>
-                    {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />} Theme
+                    {dark ? (
+                      <Sun className="h-4 w-4" />
+                    ) : (
+                      <Moon className="h-4 w-4" />
+                    )}{" "}
+                    Theme
                   </Button>
                 </div>
               </div>
