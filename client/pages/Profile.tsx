@@ -47,7 +47,13 @@ export default function Profile() {
       if (file) {
         const fd = new FormData();
         fd.append("file", file);
-        const res = await fetch("/api/upload/image", { method: "POST", body: fd, headers: { Authorization: `Bearer ${localStorage.getItem("kk_token")}` || "" } });
+        const res = await fetch("/api/upload/image", {
+          method: "POST",
+          body: fd,
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("kk_token")}` || "",
+          },
+        });
         if (!res.ok) throw new Error("Upload failed");
         const data = await res.json();
         avatar = data.url;
@@ -55,7 +61,12 @@ export default function Profile() {
       const updated = await api<{ user: any }>("/auth/me", {
         method: "PUT",
         auth: true,
-        body: JSON.stringify({ name: values.name, phone: values.phone, address: values.address, avatar }),
+        body: JSON.stringify({
+          name: values.name,
+          phone: values.phone,
+          address: values.address,
+          avatar,
+        }),
       });
       setUser(updated.user, localStorage.getItem("kk_token"));
       toast.success("Profile updated");
@@ -92,7 +103,9 @@ export default function Profile() {
                 <Label htmlFor="name">Name</Label>
                 <Input id="name" {...register("name")} />
                 {formState.errors.name && (
-                  <div className="text-xs text-destructive">{formState.errors.name.message}</div>
+                  <div className="text-xs text-destructive">
+                    {formState.errors.name.message}
+                  </div>
                 )}
               </div>
               <div className="space-y-1">
@@ -105,25 +118,46 @@ export default function Profile() {
               </div>
               <div className="space-y-1">
                 <Label>Avatar</Label>
-                <Input type="file" accept="image/*" onChange={(e) => setFile(e.target.files?.[0] || null)} />
-                <div className="text-center text-xs text-muted-foreground">or</div>
+                <Input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => setFile(e.target.files?.[0] || null)}
+                />
+                <div className="text-center text-xs text-muted-foreground">
+                  or
+                </div>
                 <Input placeholder="Image URL" {...register("avatarUrl")} />
               </div>
-              <Button type="submit" disabled={formState.isSubmitting}>Save</Button>
+              <Button type="submit" disabled={formState.isSubmitting}>
+                Save
+              </Button>
             </form>
           </section>
           <section className="rounded border p-4 space-y-4">
             <h2 className="text-xl font-bold">Change Password</h2>
-            <form className="space-y-3" onSubmit={pwd.handleSubmit(onChangePassword)}>
+            <form
+              className="space-y-3"
+              onSubmit={pwd.handleSubmit(onChangePassword)}
+            >
               <div className="space-y-1">
                 <Label htmlFor="oldPassword">Current Password</Label>
-                <Input id="oldPassword" type="password" {...pwd.register("oldPassword")} />
+                <Input
+                  id="oldPassword"
+                  type="password"
+                  {...pwd.register("oldPassword")}
+                />
               </div>
               <div className="space-y-1">
                 <Label htmlFor="newPassword">New Password</Label>
-                <Input id="newPassword" type="password" {...pwd.register("newPassword")} />
+                <Input
+                  id="newPassword"
+                  type="password"
+                  {...pwd.register("newPassword")}
+                />
               </div>
-              <Button type="submit" disabled={pwd.formState.isSubmitting}>Update Password</Button>
+              <Button type="submit" disabled={pwd.formState.isSubmitting}>
+                Update Password
+              </Button>
             </form>
           </section>
         </main>

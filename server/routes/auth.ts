@@ -164,7 +164,10 @@ router.post("/forgot", async (req, res) => {
   const user = await User.findOne({ email });
   if (!user) return res.json({ ok: true });
   const token = crypto.randomBytes(24).toString("hex");
-  user.set({ resetToken: token, resetExpires: new Date(Date.now() + 60 * 60 * 1000) });
+  user.set({
+    resetToken: token,
+    resetExpires: new Date(Date.now() + 60 * 60 * 1000),
+  });
   await user.save();
   // In real app, send email with token link
   res.json({ ok: true, token });

@@ -71,14 +71,20 @@ export default function FarmerDashboard() {
             </div>
             <div className="space-y-2">
               <Label>Image</Label>
-              <Input placeholder="Image URL (or upload below)" value={image} onChange={(e) => setImage(e.target.value)} />
+              <Input
+                placeholder="Image URL (or upload below)"
+                value={image}
+                onChange={(e) => setImage(e.target.value)}
+              />
               <Input type="file" accept="image/*" id="farmer-file" />
             </div>
             <Button
               onClick={async () => {
                 try {
                   let img = image.trim();
-                  const fileInput = document.getElementById("farmer-file") as HTMLInputElement | null;
+                  const fileInput = document.getElementById(
+                    "farmer-file",
+                  ) as HTMLInputElement | null;
                   const f = fileInput?.files?.[0] || null;
                   if (f) {
                     const fd = new FormData();
@@ -86,7 +92,10 @@ export default function FarmerDashboard() {
                     const res = await fetch("/api/upload/image", {
                       method: "POST",
                       body: fd,
-                      headers: { Authorization: `Bearer ${localStorage.getItem("kk_token")}` || "" },
+                      headers: {
+                        Authorization:
+                          `Bearer ${localStorage.getItem("kk_token")}` || "",
+                      },
                     });
                     if (!res.ok) throw new Error(await res.text());
                     const data = await res.json();
@@ -108,7 +117,14 @@ export default function FarmerDashboard() {
                   setTitle("");
                   setPrice("");
                   setImage("");
-                  (document.getElementById("farmer-file") as HTMLInputElement | null)?.value && ((document.getElementById("farmer-file") as HTMLInputElement).value = "");
+                  (
+                    document.getElementById(
+                      "farmer-file",
+                    ) as HTMLInputElement | null
+                  )?.value &&
+                    ((
+                      document.getElementById("farmer-file") as HTMLInputElement
+                    ).value = "");
                   load();
                 } catch (e: any) {
                   toast.error(e?.message || "Failed");

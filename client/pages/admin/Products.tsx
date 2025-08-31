@@ -93,7 +93,12 @@ export default function AdminProducts() {
                 value={image}
                 onChange={(e) => setImage(e.target.value)}
               />
-              <Input type="file" accept="image/*" id="file" onChange={() => {}} />
+              <Input
+                type="file"
+                accept="image/*"
+                id="file"
+                onChange={() => {}}
+              />
               <Input
                 placeholder="Stock"
                 type="number"
@@ -105,7 +110,9 @@ export default function AdminProducts() {
                   onClick={async () => {
                     try {
                       let img = image.trim();
-                      const fileInput = document.getElementById("file") as HTMLInputElement | null;
+                      const fileInput = document.getElementById(
+                        "file",
+                      ) as HTMLInputElement | null;
                       const f = fileInput?.files?.[0] || null;
                       if (f) {
                         const fd = new FormData();
@@ -113,7 +120,11 @@ export default function AdminProducts() {
                         const res = await fetch("/api/upload/image", {
                           method: "POST",
                           body: fd,
-                          headers: { Authorization: `Bearer ${localStorage.getItem("kk_token")}` || "" },
+                          headers: {
+                            Authorization:
+                              `Bearer ${localStorage.getItem("kk_token")}` ||
+                              "",
+                          },
                         });
                         if (!res.ok) throw new Error(await res.text());
                         const data = await res.json();
@@ -125,7 +136,9 @@ export default function AdminProducts() {
                         body: JSON.stringify({
                           title,
                           price: Number(price),
-                          discountPrice: discount ? Number(discount) : undefined,
+                          discountPrice: discount
+                            ? Number(discount)
+                            : undefined,
                           category,
                           images: img ? [img] : [],
                           stock: Number(stock),
@@ -136,7 +149,14 @@ export default function AdminProducts() {
                       setTitle("");
                       setPrice("");
                       setDiscount("");
-                      (document.getElementById("file") as HTMLInputElement | null)?.value && ((document.getElementById("file") as HTMLInputElement).value = "");
+                      (
+                        document.getElementById(
+                          "file",
+                        ) as HTMLInputElement | null
+                      )?.value &&
+                        ((
+                          document.getElementById("file") as HTMLInputElement
+                        ).value = "");
                       setImage("");
                       setStock("10");
                       setCategory("Vegetables");

@@ -51,21 +51,27 @@ export default function ResetPassword() {
                 <Label>Email</Label>
                 <Input type="email" {...register("email")} />
                 {formState.errors.email && (
-                  <div className="text-xs text-destructive">{formState.errors.email.message as any}</div>
+                  <div className="text-xs text-destructive">
+                    {formState.errors.email.message as any}
+                  </div>
                 )}
               </div>
               <div className="space-y-1">
                 <Label>Token</Label>
                 <Input {...register("token")} />
                 {formState.errors.token && (
-                  <div className="text-xs text-destructive">{formState.errors.token.message as any}</div>
+                  <div className="text-xs text-destructive">
+                    {formState.errors.token.message as any}
+                  </div>
                 )}
               </div>
               <div className="space-y-1">
                 <Label>New Password</Label>
                 <Input type="password" {...register("newPassword")} />
                 {formState.errors.newPassword && (
-                  <div className="text-xs text-destructive">{formState.errors.newPassword.message as any}</div>
+                  <div className="text-xs text-destructive">
+                    {formState.errors.newPassword.message as any}
+                  </div>
                 )}
               </div>
               <Button type="submit">Reset Password</Button>
