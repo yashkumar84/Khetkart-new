@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { requireAuth } from "../middlewares/auth";
+import { requireAuth, requireRole } from "../middlewares/auth";
 import { User } from "../models/User";
 import { Referral } from "../models/Referral";
 import { Payout } from "../models/Payout";
@@ -106,6 +106,35 @@ router.post("/withdraw", requireAuth, async (req, res) => {
     status: "pending",
   });
   res.json({ ok: true, payout, coins: me.coins });
+});
+
+router.post("/request-custom", requireAuth, async (req, res) => {
+  const { desiredCode } = req.body as { desiredCode: string };
+  const me = await User.findById((req as any).user.id);
+  if (!me) return res.status(404).json({ message: "Not found" });
+  const code = (desiredCode || "").trim().toUpperCase();
+  if (!/^[A-Z0-9]{4,12}$/.test(code))
+    return res.status(400).json({ message: "Invalid code format" });
+  const exists = await User.findOne({ referralCode: code });
+  if (exists) return res.status(409).json({ message: "Code already taken" });
+  me.requestedCode = code;
+  me.requestedCodeStatus = "pending" as any;
+  await me.save();
+  res.json({ ok: true, requestedCode: me.requestedCode, status: me.requestedCodeStatus });
+});
+
+router.post("/approve-custom/:userId", requireAuth, requireRole("admin"), async (req, res) => {
+  const { userId } = req.params as { userId: string };
+  const user = await User.findById(userId);
+  if (!user) return res.status(404).json({ message: "Not found" });
+  const desired = (user.requestedCode || "").toUpperCase();
+  if (!desired) return res.status(400).json({ message: "No requested code" });
+  const exists = await User.findOne({ referralCode: desired });
+  if (exists) return res.status(409).json({ message: "Code already taken" });
+  user.referralCode = desired;
+  user.requestedCodeStatus = "approved" as any;
+  await user.save();
+  res.json({ ok: true, user: { id: user.id, referralCode: user.referralCode, status: user.requestedCodeStatus } });
 });
 
 export default router;
