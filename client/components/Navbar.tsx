@@ -55,6 +55,9 @@ export default function Navbar() {
           <Link to="/contact" className="hover:text-primary">
             Contact
           </Link>
+          <Link to="/referrals" className="hover:text-primary">
+            Referrals
+          </Link>
           {user?.role === "admin" && (
             <Link to="/admin" className="hover:text-primary">
               {t("nav_admin")}
@@ -112,6 +115,11 @@ export default function Navbar() {
           </Button>
           {user ? (
             <div className="flex items-center gap-2">
+              {typeof user.coins === "number" && (
+                <Link to="/referrals" className="rounded-full border px-3 py-1 text-xs hover:bg-accent">
+                  Coins: {user.coins}
+                </Link>
+              )}
               <Button variant="secondary" asChild>
                 <Link
                   to={
