@@ -27,7 +27,11 @@ export default function Login() {
   const { login } = useAuth();
   const nav = useNavigate();
   const t = useT();
-  const { register: rhf, handleSubmit, formState } = useForm<FormData>({
+  const {
+    register: rhf,
+    handleSubmit,
+    formState,
+  } = useForm<FormData>({
     resolver: zodResolver(schema),
     mode: "onSubmit",
   });

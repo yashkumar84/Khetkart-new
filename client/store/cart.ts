@@ -44,7 +44,10 @@ function mergeItems(a: CartItem[], b: CartItem[]): CartItem[] {
     const id = it.product._id;
     const existing = map.get(id);
     if (existing)
-      map.set(id, { product: it.product, quantity: existing.quantity + it.quantity });
+      map.set(id, {
+        product: it.product,
+        quantity: existing.quantity + it.quantity,
+      });
     else map.set(id, { product: it.product, quantity: it.quantity });
   }
   return Array.from(map.values());
@@ -66,7 +69,9 @@ export const useCart = create<CartState>((set, get) => ({
       nextItems = mergeItems(targetItems, currentItems);
       save(nextItems, userId);
       // Clear guest cart after merge
-      try { localStorage.removeItem(keyFor(null)); } catch {}
+      try {
+        localStorage.removeItem(keyFor(null));
+      } catch {}
     }
     set({ ownerId: userId, items: nextItems });
   },

@@ -87,7 +87,10 @@ export default function Checkout() {
       <main className="container grid gap-6 py-8 md:grid-cols-3">
         <div className="md:col-span-2 space-y-6">
           <h1 className="text-2xl font-bold">{t("checkout")}</h1>
-          <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4 md:grid-cols-2">
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="grid gap-4 md:grid-cols-2"
+          >
             <div className="space-y-2">
               <Label htmlFor="name">{t("name")}</Label>
               <Input id="name" placeholder="John Doe" {...register("name")} />
@@ -99,7 +102,11 @@ export default function Checkout() {
             </div>
             <div className="space-y-2">
               <Label htmlFor="phone">Phone</Label>
-              <Input id="phone" placeholder="9999999999" {...register("phone")} />
+              <Input
+                id="phone"
+                placeholder="9999999999"
+                {...register("phone")}
+              />
               {formState.errors.phone && (
                 <div className="text-xs text-destructive">
                   {formState.errors.phone.message}

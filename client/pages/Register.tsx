@@ -72,7 +72,11 @@ export default function Register() {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="password">{t("password")}</Label>
-                <Input id="password" type="password" {...register("password")} />
+                <Input
+                  id="password"
+                  type="password"
+                  {...register("password")}
+                />
                 {formState.errors.password && (
                   <div className="text-xs text-destructive">
                     {formState.errors.password.message}
@@ -80,7 +84,9 @@ export default function Register() {
                 )}
               </div>
               <Button type="submit" disabled={formState.isSubmitting}>
-                {formState.isSubmitting ? "Please wait..." : t("create_account")}
+                {formState.isSubmitting
+                  ? "Please wait..."
+                  : t("create_account")}
               </Button>
             </form>
           </CardContent>

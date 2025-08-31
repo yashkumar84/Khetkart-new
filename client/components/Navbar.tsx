@@ -28,7 +28,6 @@ export default function Navbar() {
   const [q, setQ] = useState("");
   const dq = useDebounce(q, 400);
 
-
   useEffect(() => {
     if (dq.trim().length === 0) return; // avoid empty
     fetch({ q: dq });
