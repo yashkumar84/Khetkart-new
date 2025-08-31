@@ -87,9 +87,14 @@ export default function Navbar() {
                   <Link to="/referrals">Referrals</Link>
                 </DropdownMenuItem>
                 {user?.role === "admin" && (
-                  <DropdownMenuItem asChild>
-                    <Link to="/admin">{t("nav_admin")}</Link>
-                  </DropdownMenuItem>
+                  <>
+                    <DropdownMenuItem asChild>
+                      <Link to="/admin">{t("nav_admin")}</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/admin/referrals">Admin Referrals</Link>
+                    </DropdownMenuItem>
+                  </>
                 )}
                 {user?.role === "farmer" && (
                   <DropdownMenuItem asChild>
