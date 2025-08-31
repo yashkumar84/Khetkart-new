@@ -5,6 +5,7 @@ import { api } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
 import {
   Table,
   TableBody,
@@ -27,6 +28,7 @@ export default function FarmerDashboard() {
   const [title, setTitle] = useState("");
   const [price, setPrice] = useState("");
   const [category, setCategory] = useState("Vegetables");
+  const [image, setImage] = useState("");
 
   async function load() {
     const res = await api<{ products: Product[] }>("/farmer/my-products", {
@@ -67,23 +69,50 @@ export default function FarmerDashboard() {
                 onChange={(e) => setCategory(e.target.value)}
               />
             </div>
+            <div className="space-y-2">
+              <Label>Image</Label>
+              <Input placeholder="Image URL (or upload below)" value={image} onChange={(e) => setImage(e.target.value)} />
+              <Input type="file" accept="image/*" id="farmer-file" />
+            </div>
             <Button
               onClick={async () => {
-                await api("/products", {
-                  method: "POST",
-                  auth: true,
-                  body: JSON.stringify({
-                    title,
-                    price: Number(price),
-                    category,
-                    images: [],
-                    stock: 10,
-                    isPublished: false,
-                  }),
-                });
-                setTitle("");
-                setPrice("");
-                load();
+                try {
+                  let img = image.trim();
+                  const fileInput = document.getElementById("farmer-file") as HTMLInputElement | null;
+                  const f = fileInput?.files?.[0] || null;
+                  if (f) {
+                    const fd = new FormData();
+                    fd.append("file", f);
+                    const res = await fetch("/api/upload/image", {
+                      method: "POST",
+                      body: fd,
+                      headers: { Authorization: `Bearer ${localStorage.getItem("kk_token")}` || "" },
+                    });
+                    if (!res.ok) throw new Error(await res.text());
+                    const data = await res.json();
+                    img = data.url;
+                  }
+                  await api("/products", {
+                    method: "POST",
+                    auth: true,
+                    body: JSON.stringify({
+                      title,
+                      price: Number(price),
+                      category,
+                      images: img ? [img] : [],
+                      stock: 10,
+                      isPublished: false,
+                    }),
+                  });
+                  toast.success("Submitted for approval");
+                  setTitle("");
+                  setPrice("");
+                  setImage("");
+                  (document.getElementById("farmer-file") as HTMLInputElement | null)?.value && ((document.getElementById("farmer-file") as HTMLInputElement).value = "");
+                  load();
+                } catch (e: any) {
+                  toast.error(e?.message || "Failed");
+                }
               }}
             >
               Submit for Approval
