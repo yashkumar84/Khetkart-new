@@ -59,6 +59,14 @@ router.post("/", requireAuth, async (req, res) => {
     address,
     status: "Placed",
   });
+  // Update product soldUnits and stock
+  for (const it of dbItems) {
+    try {
+      await Product.findByIdAndUpdate(it.product, {
+        $inc: { soldUnits: it.quantity, stock: -it.quantity },
+      });
+    } catch {}
+  }
   res.status(201).json({ order });
 });
 
