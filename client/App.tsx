@@ -21,6 +21,7 @@ import AdminUsers from "./pages/admin/Users";
 import AdminProducts from "./pages/admin/Products";
 import AdminOrders from "./pages/admin/Orders";
 import AdminCoupons from "./pages/admin/Coupons";
+import AdminReferrals from "./pages/admin/Referrals";
 import FarmerDashboard from "./pages/farmer/Dashboard";
 import DeliveryDashboard from "./pages/delivery/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -122,6 +123,14 @@ const App = () => {
               element={
                 <ProtectedRoute role="admin">
                   <AdminOrders />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/referrals"
+              element={
+                <ProtectedRoute role="admin">
+                  <AdminReferrals />
                 </ProtectedRoute>
               }
             />
