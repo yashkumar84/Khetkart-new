@@ -45,6 +45,7 @@ router.get("/", async (req, res) => {
     const [list, total] = await Promise.all([
       Product.find(filter)
         .sort(sortBy)
+        .populate("createdBy", "name email role")
         .skip((p - 1) * ps)
         .limit(ps)
         .lean(),
