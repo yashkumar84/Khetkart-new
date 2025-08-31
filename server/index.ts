@@ -68,7 +68,7 @@ export function createServer() {
   app.use("/api/farmer", ensureDb, farmerRoutes);
   app.use("/api/delivery", ensureDb, deliveryRoutes);
   app.use("/api/coupons", ensureDb, couponRoutes);
-  app.use("/api/upload", ensureDb, (await import("./routes/upload")).default);
+  app.use("/api/upload", ensureDb, uploadRoutes);
 
   return app;
 }
