@@ -25,6 +25,9 @@ import FarmerDashboard from "./pages/farmer/Dashboard";
 import DeliveryDashboard from "./pages/delivery/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { useAuth } from "./store/auth";
+import Profile from "./pages/Profile";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 const queryClient = new QueryClient();
 
