@@ -102,9 +102,22 @@ export default function Navbar() {
           {user ? (
             <div className="flex items-center gap-2">
               <Button variant="secondary" asChild>
-                <Link to={user.role === "admin" ? "/admin" : "/orders"}>
+                <Link
+                  to={
+                    user.role === "admin"
+                      ? "/admin"
+                      : user.role === "farmer"
+                        ? "/farmer"
+                        : user.role === "delivery"
+                          ? "/delivery"
+                          : "/orders"
+                  }
+                >
                   <User className="mr-2 h-4 w-4" /> {user.name.split(" ")[0]}
                 </Link>
+              </Button>
+              <Button asChild variant="outline">
+                <Link to="/profile">Profile</Link>
               </Button>
               <Button
                 variant="ghost"
