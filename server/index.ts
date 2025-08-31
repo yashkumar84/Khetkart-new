@@ -12,6 +12,7 @@ import farmerRoutes from "./routes/farmer";
 import deliveryRoutes from "./routes/delivery";
 import couponRoutes from "./routes/coupons";
 import uploadRoutes from "./routes/upload";
+import referralRoutes from "./routes/referrals";
 
 const ensureDb: RequestHandler = async (_req, res, next) => {
   if (!process.env.MONGODB_URI) {
@@ -69,6 +70,7 @@ export function createServer() {
   app.use("/api/delivery", ensureDb, deliveryRoutes);
   app.use("/api/coupons", ensureDb, couponRoutes);
   app.use("/api/upload", ensureDb, uploadRoutes);
+  app.use("/api/referrals", ensureDb, referralRoutes);
 
   return app;
 }
