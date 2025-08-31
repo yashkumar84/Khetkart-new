@@ -24,13 +24,26 @@ export default function PromoBanners() {
   return (
     <section className="grid gap-4 md:grid-cols-2">
       {banners.map((b, i) => (
-        <Link key={i} to={b.to} className="group overflow-hidden rounded-2xl border bg-card shadow-sm">
+        <Link
+          key={i}
+          to={b.to}
+          className="group overflow-hidden rounded-2xl border bg-card shadow-sm"
+        >
           <div className="relative">
             {/* eslint-disable-next-line */}
-            <img src={b.img} alt={b.title} className="h-56 w-full object-cover transition-transform group-hover:scale-105" />
+            <img
+              src={b.img}
+              alt={b.title}
+              className="h-56 w-full object-cover transition-transform group-hover:scale-105"
+            />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
             <div className="absolute bottom-3 left-3 right-3 text-white">
-              <Badge variant="secondary" className="mb-2 bg-white/90 text-black">{b.cta}</Badge>
+              <Badge
+                variant="secondary"
+                className="mb-2 bg-white/90 text-black"
+              >
+                {b.cta}
+              </Badge>
               <div className="text-xl font-semibold">{b.title}</div>
               <div className="text-sm opacity-90">{b.sub}</div>
             </div>

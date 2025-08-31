@@ -90,8 +90,12 @@ export default function Index() {
             </div>
           ) : products.length === 0 ? (
             <div className="rounded border p-6 text-center">
-              <div className="mb-2 font-semibold">{t("empty_products_title")}</div>
-              <p className="mb-4 text-sm text-muted-foreground">{t("empty_products_sub")}</p>
+              <div className="mb-2 font-semibold">
+                {t("empty_products_title")}
+              </div>
+              <p className="mb-4 text-sm text-muted-foreground">
+                {t("empty_products_sub")}
+              </p>
               <button
                 className="inline-flex items-center rounded bg-primary px-4 py-2 text-primary-foreground"
                 onClick={async () => {

@@ -1,13 +1,44 @@
-import { Leaf, ShieldCheck, Truck, Users, Sprout, HandCoins } from "lucide-react";
+import {
+  Leaf,
+  ShieldCheck,
+  Truck,
+  Users,
+  Sprout,
+  HandCoins,
+} from "lucide-react";
 
 export default function WhyChooseUs() {
   const items = [
-    { icon: Leaf, title: "Fresh & Natural", sub: "Sourced daily from local farms" },
-    { icon: ShieldCheck, title: "Quality Checked", sub: "Multi-step quality inspection" },
-    { icon: Truck, title: "Fast Delivery", sub: "Same-day delivery in your area" },
-    { icon: Users, title: "Farmer Empowerment", sub: "Fair prices paid to farmers" },
-    { icon: Sprout, title: "Sustainable", sub: "Eco-conscious packaging and logistics" },
-    { icon: HandCoins, title: "Best Value", sub: "Transparent pricing with deals" },
+    {
+      icon: Leaf,
+      title: "Fresh & Natural",
+      sub: "Sourced daily from local farms",
+    },
+    {
+      icon: ShieldCheck,
+      title: "Quality Checked",
+      sub: "Multi-step quality inspection",
+    },
+    {
+      icon: Truck,
+      title: "Fast Delivery",
+      sub: "Same-day delivery in your area",
+    },
+    {
+      icon: Users,
+      title: "Farmer Empowerment",
+      sub: "Fair prices paid to farmers",
+    },
+    {
+      icon: Sprout,
+      title: "Sustainable",
+      sub: "Eco-conscious packaging and logistics",
+    },
+    {
+      icon: HandCoins,
+      title: "Best Value",
+      sub: "Transparent pricing with deals",
+    },
   ];
   return (
     <section className="space-y-3">

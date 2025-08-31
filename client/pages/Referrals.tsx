@@ -25,7 +25,10 @@ export default function Referrals() {
   const [applyCode, setApplyCode] = useState("");
   const [referrals, setReferrals] = useState<ReferralEntry[]>([]);
   const [coins, setCoins] = useState<number>(user?.coins || 0);
-  const [stats, setStats] = useState<{ totalReferred: number; totalEarned: number } | null>(null);
+  const [stats, setStats] = useState<{
+    totalReferred: number;
+    totalEarned: number;
+  } | null>(null);
   const [wAmount, setWAmount] = useState<string>("");
   const [wMethod, setWMethod] = useState<string>("");
   const [wDetails, setWDetails] = useState<string>("");
@@ -43,13 +46,21 @@ export default function Referrals() {
       if (!ok) throw new Error("API unavailable");
       const [codeRes, histRes, statRes] = await Promise.all([
         api<{ code: string }>("/referrals/code", { auth: true }),
-        api<{ referrals: ReferralEntry[] }>("/referrals/history", { auth: true }),
-        api<{ coins: number; totalReferred: number; totalEarned: number }>("/referrals/stats", { auth: true }),
+        api<{ referrals: ReferralEntry[] }>("/referrals/history", {
+          auth: true,
+        }),
+        api<{ coins: number; totalReferred: number; totalEarned: number }>(
+          "/referrals/stats",
+          { auth: true },
+        ),
       ]);
       setCode(codeRes.code);
       setReferrals(histRes.referrals || []);
       setCoins(statRes.coins || 0);
-      setStats({ totalReferred: statRes.totalReferred || 0, totalEarned: statRes.totalEarned || 0 });
+      setStats({
+        totalReferred: statRes.totalReferred || 0,
+        totalEarned: statRes.totalEarned || 0,
+      });
       // sync auth store coins
       if (user) setUser({ ...user, coins: statRes.coins } as any);
     } catch (e: any) {
@@ -90,7 +101,11 @@ export default function Referrals() {
       const res = await api<{ coins: number }>("/referrals/withdraw", {
         method: "POST",
         auth: true,
-        body: JSON.stringify({ amount: amt, method: wMethod, details: wDetails }),
+        body: JSON.stringify({
+          amount: amt,
+          method: wMethod,
+          details: wDetails,
+        }),
       });
       toast.success("Withdrawal requested");
       setWAmount("");
@@ -115,13 +130,31 @@ export default function Referrals() {
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="flex items-center gap-2">
-                <Input value={code} readOnly className="uppercase tracking-widest" />
-                <Button onClick={() => { navigator.clipboard.writeText(code); toast.success("Code copied"); }}>Copy</Button>
+                <Input
+                  value={code}
+                  readOnly
+                  className="uppercase tracking-widest"
+                />
+                <Button
+                  onClick={() => {
+                    navigator.clipboard.writeText(code);
+                    toast.success("Code copied");
+                  }}
+                >
+                  Copy
+                </Button>
               </div>
               <Label className="text-sm">Share link</Label>
               <div className="flex items-center gap-2">
                 <Input value={shareLink} readOnly />
-                <Button onClick={() => { navigator.clipboard.writeText(shareLink); toast.success("Link copied"); }}>Copy</Button>
+                <Button
+                  onClick={() => {
+                    navigator.clipboard.writeText(shareLink);
+                    toast.success("Link copied");
+                  }}
+                >
+                  Copy
+                </Button>
               </div>
             </CardContent>
           </Card>
@@ -132,10 +165,17 @@ export default function Referrals() {
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="flex items-center gap-2">
-                <Input placeholder="Enter code" value={applyCode} onChange={(e) => setApplyCode(e.target.value)} className="uppercase" />
+                <Input
+                  placeholder="Enter code"
+                  value={applyCode}
+                  onChange={(e) => setApplyCode(e.target.value)}
+                  className="uppercase"
+                />
                 <Button onClick={handleApply}>Apply</Button>
               </div>
-              <div className="text-sm text-muted-foreground">You can't apply your own code and can only apply once.</div>
+              <div className="text-sm text-muted-foreground">
+                You can't apply your own code and can only apply once.
+              </div>
             </CardContent>
           </Card>
         </div>
@@ -147,7 +187,10 @@ export default function Referrals() {
             </CardHeader>
             <CardContent className="space-y-2">
               <div className="text-3xl font-bold">{coins} coins</div>
-              <div className="text-sm text-muted-foreground">Total referred: {stats?.totalReferred ?? 0} · Total earned: {stats?.totalEarned ?? 0} coins</div>
+              <div className="text-sm text-muted-foreground">
+                Total referred: {stats?.totalReferred ?? 0} · Total earned:{" "}
+                {stats?.totalEarned ?? 0} coins
+              </div>
             </CardContent>
           </Card>
           <Card>
@@ -156,12 +199,27 @@ export default function Referrals() {
             </CardHeader>
             <CardContent className="space-y-3">
               <Label className="text-sm">Amount</Label>
-              <Input type="number" min={1} value={wAmount} onChange={(e) => setWAmount(e.target.value)} />
+              <Input
+                type="number"
+                min={1}
+                value={wAmount}
+                onChange={(e) => setWAmount(e.target.value)}
+              />
               <Label className="text-sm">Method (UPI/Bank)</Label>
-              <Input placeholder="e.g. UPI id or bank details" value={wMethod} onChange={(e) => setWMethod(e.target.value)} />
+              <Input
+                placeholder="e.g. UPI id or bank details"
+                value={wMethod}
+                onChange={(e) => setWMethod(e.target.value)}
+              />
               <Label className="text-sm">Details</Label>
-              <Input placeholder="Account details" value={wDetails} onChange={(e) => setWDetails(e.target.value)} />
-              <Button disabled={!wAmount} onClick={handleWithdraw}>Request withdrawal</Button>
+              <Input
+                placeholder="Account details"
+                value={wDetails}
+                onChange={(e) => setWDetails(e.target.value)}
+              />
+              <Button disabled={!wAmount} onClick={handleWithdraw}>
+                Request withdrawal
+              </Button>
             </CardContent>
           </Card>
         </div>
@@ -174,16 +232,27 @@ export default function Referrals() {
             {loading ? (
               <div className="h-24 animate-pulse rounded bg-muted/30" />
             ) : referrals.length === 0 ? (
-              <div className="text-sm text-muted-foreground">No referrals yet. Share your code to start earning.</div>
+              <div className="text-sm text-muted-foreground">
+                No referrals yet. Share your code to start earning.
+              </div>
             ) : (
               <div className="divide-y">
                 {referrals.map((r) => (
-                  <div key={r._id} className="flex items-center justify-between py-3 text-sm">
+                  <div
+                    key={r._id}
+                    className="flex items-center justify-between py-3 text-sm"
+                  >
                     <div>
-                      <div className="font-medium">{r.referred?.name || r.referred?.email || "New user"}</div>
-                      <div className="text-muted-foreground">Code: {r.code} · You earned {r.rewardReferrer} coins</div>
+                      <div className="font-medium">
+                        {r.referred?.name || r.referred?.email || "New user"}
+                      </div>
+                      <div className="text-muted-foreground">
+                        Code: {r.code} · You earned {r.rewardReferrer} coins
+                      </div>
                     </div>
-                    <div className="text-muted-foreground">{new Date(r.createdAt).toLocaleDateString()}</div>
+                    <div className="text-muted-foreground">
+                      {new Date(r.createdAt).toLocaleDateString()}
+                    </div>
                   </div>
                 ))}
               </div>

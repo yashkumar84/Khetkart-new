@@ -10,7 +10,10 @@ const REFERRER_REWARD = Number(process.env.REFERRER_REWARD || 50);
 const REFERRED_REWARD = Number(process.env.REFERRED_REWARD || 20);
 
 function genCode(base: string) {
-  const clean = base.replace(/[^a-z0-9]/gi, "").slice(0, 6).toUpperCase();
+  const clean = base
+    .replace(/[^a-z0-9]/gi, "")
+    .slice(0, 6)
+    .toUpperCase();
   const suffix = Math.random().toString(36).slice(2, 6).toUpperCase();
   return `${clean}${suffix}`;
 }
@@ -89,12 +92,19 @@ router.post("/withdraw", requireAuth, async (req, res) => {
   const me = await User.findById((req as any).user.id);
   if (!me) return res.status(404).json({ message: "Not found" });
   const amt = Math.floor(Number(amount || 0));
-  if (!amt || amt <= 0) return res.status(400).json({ message: "Invalid amount" });
+  if (!amt || amt <= 0)
+    return res.status(400).json({ message: "Invalid amount" });
   if ((me.coins || 0) < amt)
     return res.status(400).json({ message: "Insufficient coins" });
   me.coins = (me.coins || 0) - amt;
   await me.save();
-  const payout = await Payout.create({ user: me._id, amount: amt, method, details, status: "pending" });
+  const payout = await Payout.create({
+    user: me._id,
+    amount: amt,
+    method,
+    details,
+    status: "pending",
+  });
   res.json({ ok: true, payout, coins: me.coins });
 });
 

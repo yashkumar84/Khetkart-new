@@ -75,7 +75,10 @@ export default function Navbar() {
           )}
         </nav>
         <div className="ml-auto flex max-w-xl flex-1 items-center gap-2">
-          <form onSubmit={submitSearch} className="flex flex-1 items-center gap-2">
+          <form
+            onSubmit={submitSearch}
+            className="flex flex-1 items-center gap-2"
+          >
             <Input
               name="q"
               value={q}
@@ -83,7 +86,9 @@ export default function Navbar() {
               placeholder={t("search_placeholder")}
               className="rounded-full"
             />
-            <Button type="submit" variant="secondary">Search</Button>
+            <Button type="submit" variant="secondary">
+              Search
+            </Button>
           </form>
           <Select value={lang} onValueChange={(v) => setLang(v as any)}>
             <SelectTrigger className="w-28">
@@ -116,7 +121,10 @@ export default function Navbar() {
           {user ? (
             <div className="flex items-center gap-2">
               {typeof user.coins === "number" && (
-                <Link to="/referrals" className="rounded-full border px-3 py-1 text-xs hover:bg-accent">
+                <Link
+                  to="/referrals"
+                  className="rounded-full border px-3 py-1 text-xs hover:bg-accent"
+                >
                   Coins: {user.coins}
                 </Link>
               )}

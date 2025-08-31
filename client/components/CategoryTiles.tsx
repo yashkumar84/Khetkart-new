@@ -27,7 +27,9 @@ export default function CategoryTiles() {
       {tiles.map((t) => (
         <button
           key={t.key}
-          onClick={() => navigate(`/shop?category=${encodeURIComponent(t.key)}`)}
+          onClick={() =>
+            navigate(`/shop?category=${encodeURIComponent(t.key)}`)
+          }
           className="group overflow-hidden rounded-xl border text-left"
         >
           <div className="aspect-[4/3] overflow-hidden">

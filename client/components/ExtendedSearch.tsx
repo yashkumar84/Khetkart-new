@@ -1,6 +1,12 @@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -17,7 +23,10 @@ export default function ExtendedSearch() {
   }
   return (
     <section className="rounded-2xl border bg-card p-5 shadow-sm">
-      <form onSubmit={submit} className="grid gap-3 md:grid-cols-[1fr_200px_auto]">
+      <form
+        onSubmit={submit}
+        className="grid gap-3 md:grid-cols-[1fr_200px_auto]"
+      >
         <Input
           value={q}
           onChange={(e) => setQ(e.target.value)}
@@ -37,14 +46,19 @@ export default function ExtendedSearch() {
             <SelectItem value="Others">Others</SelectItem>
           </SelectContent>
         </Select>
-        <Button type="submit" className="h-12 rounded-full">Search</Button>
+        <Button type="submit" className="h-12 rounded-full">
+          Search
+        </Button>
       </form>
       <div className="mt-3 flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
         Popular:
-        {["Vegetables","Fruits","Milk"].map((t) => (
+        {["Vegetables", "Fruits", "Milk"].map((t) => (
           <button
             key={t}
-            onClick={() => { setCat(t); navigate(`/shop?category=${encodeURIComponent(t)}`); }}
+            onClick={() => {
+              setCat(t);
+              navigate(`/shop?category=${encodeURIComponent(t)}`);
+            }}
             className="rounded-full border px-3 py-1 hover:bg-accent"
             type="button"
           >

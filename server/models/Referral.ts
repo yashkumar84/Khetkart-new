@@ -12,12 +12,24 @@ export interface IReferral extends Document {
 const ReferralSchema = new Schema<IReferral>(
   {
     code: { type: String, required: true, index: true },
-    referrer: { type: Schema.Types.ObjectId, ref: "User", required: true, index: true },
-    referred: { type: Schema.Types.ObjectId, ref: "User", required: true, index: true },
+    referrer: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+      index: true,
+    },
+    referred: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+      index: true,
+    },
     rewardReferrer: { type: Number, required: true },
     rewardReferred: { type: Number, required: true },
   },
   { timestamps: { createdAt: true, updatedAt: false } },
 );
 
-export const Referral = mongoose.models.Referral || mongoose.model<IReferral>("Referral", ReferralSchema);
+export const Referral =
+  mongoose.models.Referral ||
+  mongoose.model<IReferral>("Referral", ReferralSchema);
