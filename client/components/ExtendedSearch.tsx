@@ -29,7 +29,7 @@ export default function ExtendedSearch() {
             <SelectValue placeholder="All categories" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">All</SelectItem>
+            <SelectItem value="all">All</SelectItem>
             <SelectItem value="Vegetables">Vegetables</SelectItem>
             <SelectItem value="Fruits">Fruits</SelectItem>
             <SelectItem value="Milk">Milk</SelectItem>
