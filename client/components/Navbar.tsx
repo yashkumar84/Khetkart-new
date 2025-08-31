@@ -16,6 +16,7 @@ import { Sun, Moon, ShoppingCart, User } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useT } from "@/i18n";
+import { toast } from "sonner";
 
 export default function Navbar() {
   const { user, logout } = useAuth();
@@ -104,6 +105,7 @@ export default function Navbar() {
                 variant="ghost"
                 onClick={() => {
                   logout();
+                  toast.success("Logged out");
                 }}
               >
                 Logout
