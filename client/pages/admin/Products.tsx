@@ -12,6 +12,8 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { toast } from "sonner";
 import {
   Select,
   SelectContent,
@@ -52,76 +54,103 @@ export default function AdminProducts() {
         <main className="container py-8">
           <h1 className="mb-4 text-2xl font-bold">Products</h1>
 
-          <div className="mb-6 grid gap-3 md:grid-cols-6">
-            <Input
-              placeholder="Title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-            />
-            <Input
-              placeholder="Price"
-              type="number"
-              value={price}
-              onChange={(e) => setPrice(e.target.value)}
-            />
-            <Input
-              placeholder="Discount Price"
-              type="number"
-              value={discount}
-              onChange={(e) => setDiscount(e.target.value)}
-            />
-            <Select value={category} onValueChange={(v) => setCategory(v)}>
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Vegetables">Vegetables</SelectItem>
-                <SelectItem value="Fruits">Fruits</SelectItem>
-                <SelectItem value="Milk">Milk</SelectItem>
-                <SelectItem value="Crops">Crops</SelectItem>
-                <SelectItem value="Others">Others</SelectItem>
-              </SelectContent>
-            </Select>
-            <Input
-              placeholder="Image URL"
-              value={image}
-              onChange={(e) => setImage(e.target.value)}
-            />
-            <Input
-              placeholder="Stock"
-              type="number"
-              value={stock}
-              onChange={(e) => setStock(e.target.value)}
-            />
-            <div className="md:col-span-6">
-              <Button
-                onClick={async () => {
-                  await api("/products", {
-                    method: "POST",
-                    auth: true,
-                    body: JSON.stringify({
-                      title,
-                      price: Number(price),
-                      discountPrice: discount ? Number(discount) : undefined,
-                      category,
-                      images: image ? [image] : [],
-                      stock: Number(stock),
-                      isPublished: false,
-                    }),
-                  });
-                  setTitle("");
-                  setPrice("");
-                  setDiscount("");
-                  setImage("");
-                  setStock("10");
-                  setCategory("Vegetables");
-                  load();
-                }}
-              >
-                Create Product
-              </Button>
-            </div>
-          </div>
+          <Card className="mb-6">
+            <CardHeader>
+              <h2 className="text-lg font-semibold">Create Product</h2>
+            </CardHeader>
+            <CardContent className="grid gap-3 md:grid-cols-6">
+              <Input
+                placeholder="Title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+              />
+              <Input
+                placeholder="Price"
+                type="number"
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+              />
+              <Input
+                placeholder="Discount Price"
+                type="number"
+                value={discount}
+                onChange={(e) => setDiscount(e.target.value)}
+              />
+              <Select value={category} onValueChange={(v) => setCategory(v)}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Vegetables">Vegetables</SelectItem>
+                  <SelectItem value="Fruits">Fruits</SelectItem>
+                  <SelectItem value="Milk">Milk</SelectItem>
+                  <SelectItem value="Crops">Crops</SelectItem>
+                  <SelectItem value="Others">Others</SelectItem>
+                </SelectContent>
+              </Select>
+              <Input
+                placeholder="Image URL (or leave empty to upload)"
+                value={image}
+                onChange={(e) => setImage(e.target.value)}
+              />
+              <Input type="file" accept="image/*" id="file" onChange={() => {}} />
+              <Input
+                placeholder="Stock"
+                type="number"
+                value={stock}
+                onChange={(e) => setStock(e.target.value)}
+              />
+              <div className="md:col-span-6">
+                <Button
+                  onClick={async () => {
+                    try {
+                      let img = image.trim();
+                      const fileInput = document.getElementById("file") as HTMLInputElement | null;
+                      const f = fileInput?.files?.[0] || null;
+                      if (f) {
+                        const fd = new FormData();
+                        fd.append("file", f);
+                        const res = await fetch("/api/upload/image", {
+                          method: "POST",
+                          body: fd,
+                          headers: { Authorization: `Bearer ${localStorage.getItem("kk_token")}` || "" },
+                        });
+                        if (!res.ok) throw new Error(await res.text());
+                        const data = await res.json();
+                        img = data.url;
+                      }
+                      await api("/products", {
+                        method: "POST",
+                        auth: true,
+                        body: JSON.stringify({
+                          title,
+                          price: Number(price),
+                          discountPrice: discount ? Number(discount) : undefined,
+                          category,
+                          images: img ? [img] : [],
+                          stock: Number(stock),
+                          isPublished: false,
+                        }),
+                      });
+                      toast.success("Product created");
+                      setTitle("");
+                      setPrice("");
+                      setDiscount("");
+                      (document.getElementById("file") as HTMLInputElement | null)?.value && ((document.getElementById("file") as HTMLInputElement).value = "");
+                      setImage("");
+                      setStock("10");
+                      setCategory("Vegetables");
+                      load();
+                    } catch (e: any) {
+                      toast.error(e?.message || "Failed to create product");
+                    }
+                  }}
+                >
+                  Create Product
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
 
           <Table>
             <TableHeader>
