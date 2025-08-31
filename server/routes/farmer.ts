@@ -5,20 +5,8 @@ import { User } from "../models/User";
 
 const router = Router();
 
-router.post("/apply", requireAuth, async (req, res) => {
-  const user = await User.findByIdAndUpdate(
-    (req as any).user.id,
-    { role: "farmer" },
-    { new: true },
-  );
-  res.json({
-    user: {
-      id: user!.id,
-      name: user!.name,
-      email: user!.email,
-      role: user!.role,
-    },
-  });
+router.post("/apply", requireAuth, async (_req, res) => {
+  return res.status(403).json({ message: "Only admin can assign roles" });
 });
 
 router.get(
