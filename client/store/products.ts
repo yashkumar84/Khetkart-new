@@ -46,6 +46,10 @@ export const useProducts = create<State>((set, get) => ({
     if (query) q.set("q", query);
     if (cat) q.set("category", cat);
     if (params?.discountOnly) q.set("discountOnly", "true");
+    if (typeof params?.inStock !== "undefined" && params?.inStock)
+      q.set("inStock", "true");
+    if (typeof params?.minPrice === "number") q.set("minPrice", String(params!.minPrice));
+    if (typeof params?.maxPrice === "number") q.set("maxPrice", String(params!.maxPrice));
     q.set("published", "true");
     try {
       const ok = await isApiAvailable();
