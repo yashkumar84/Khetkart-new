@@ -19,13 +19,12 @@ interface CartState {
 }
 
 function keyFor(ownerId: string | null) {
-  return ownerId ? `kk_cart_${ownerId}` : null;
+  return ownerId ? `kk_cart_${ownerId}` : "kk_cart_guest";
 }
 
 function load(ownerId: string | null) {
   if (typeof window === "undefined") return [] as CartItem[];
   const key = keyFor(ownerId);
-  if (!key) return [];
   try {
     return JSON.parse(localStorage.getItem(key) || "[]");
   } catch {
@@ -36,19 +35,39 @@ function load(ownerId: string | null) {
 function save(items: CartItem[], ownerId: string | null) {
   if (typeof window === "undefined") return;
   const key = keyFor(ownerId);
-  if (!key) return; // do not persist carts for guests
   localStorage.setItem(key, JSON.stringify(items));
 }
 
+function mergeItems(a: CartItem[], b: CartItem[]): CartItem[] {
+  const map = new Map<string, CartItem>();
+  for (const it of [...a, ...b]) {
+    const id = it.product._id;
+    const existing = map.get(id);
+    if (existing)
+      map.set(id, { product: it.product, quantity: existing.quantity + it.quantity });
+    else map.set(id, { product: it.product, quantity: it.quantity });
+  }
+  return Array.from(map.values());
+}
+
 export const useCart = create<CartState>((set, get) => ({
-  items: [],
+  items: load(null),
   ownerId: null,
   setOwner(userId) {
     const prevOwner = get().ownerId;
-    // Persist current items under previous owner (if any)
-    if (prevOwner) save(get().items, prevOwner);
-    // Switch owner and load that owner's cart
-    const nextItems = load(userId);
+    const currentItems = get().items;
+    // Persist current items under previous owner (guest or user)
+    save(currentItems, prevOwner ?? null);
+    // Load target owner's items
+    const targetItems = load(userId);
+    let nextItems = targetItems;
+    // If logging in (guest -> user), merge guest items into user cart
+    if (!prevOwner && userId) {
+      nextItems = mergeItems(targetItems, currentItems);
+      save(nextItems, userId);
+      // Clear guest cart after merge
+      try { localStorage.removeItem(keyFor(null)); } catch {}
+    }
     set({ ownerId: userId, items: nextItems });
   },
   add(p, qty = 1) {
