@@ -54,7 +54,10 @@ router.get("/", async (req, res) => {
     return res.json({ products: list, total, page: p, pageSize: ps });
   }
 
-  const products = await Product.find(filter).sort(sortBy).lean();
+  const products = await Product.find(filter)
+    .sort(sortBy)
+    .populate("createdBy", "name email role")
+    .lean();
   res.json({ products, total: products.length });
 });
 
