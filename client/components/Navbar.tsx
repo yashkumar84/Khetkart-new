@@ -30,8 +30,12 @@ export default function Navbar() {
   const dq = useDebounce(q, 400);
 
   useEffect(() => {
-    if (dq.trim().length === 0) return; // avoid empty
-    fetch({ q: dq });
+    const query = dq.trim();
+    if (query.length === 0) {
+      fetch({ q: "" });
+    } else {
+      fetch({ q: query });
+    }
     navigate("/");
   }, [dq]);
 
