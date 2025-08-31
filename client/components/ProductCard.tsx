@@ -60,7 +60,13 @@ export default function ProductCard({ p }: { p: Product }) {
         </div>
       </CardContent>
       <CardFooter className="p-4">
-        <Button className="w-full" onClick={() => add(p, 1)}>
+        <Button
+          className="w-full"
+          onClick={() => {
+            add(p, 1);
+            toast.success("Added to cart");
+          }}
+        >
           Add to cart
         </Button>
       </CardFooter>
