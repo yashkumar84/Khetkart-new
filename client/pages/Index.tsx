@@ -113,8 +113,13 @@ export default function Index() {
               <button
                 className="inline-flex items-center rounded bg-primary px-4 py-2 text-primary-foreground"
                 onClick={async () => {
-                  await fetch("/api/seed/full", { method: "POST" });
-                  fetch({});
+                  try {
+                    const { api, isApiAvailable } = await import("@/lib/api");
+                    const ok = await isApiAvailable();
+                    if (!ok) return;
+                    await api("/seed/full", { method: "POST" });
+                    fetch({});
+                  } catch {}
                 }}
               >
                 {t("seed_demo")}
