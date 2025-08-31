@@ -57,6 +57,7 @@ router.post(
       discountPrice,
       stock: stock ?? 0,
       category,
+      unit,
       isPublished: isPublished ?? false,
       createdBy: (req as any).user.id,
     });
