@@ -148,7 +148,22 @@ router.post(
   async (req, res) => {
     const p = await Product.findByIdAndUpdate(
       req.params.id,
-      { isPublished: false },
+      { isPublished: false, publishRequested: false },
+      { new: true },
+    );
+    if (!p) return res.status(404).json({ message: "Not found" });
+    res.json({ product: p });
+  },
+);
+
+router.post(
+  "/:id/decline",
+  requireAuth,
+  requireRole("admin"),
+  async (req, res) => {
+    const p = await Product.findByIdAndUpdate(
+      req.params.id,
+      { isPublished: false, isDeclined: true, publishRequested: false },
       { new: true },
     );
     if (!p) return res.status(404).json({ message: "Not found" });
